@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Board {
 
     private static int width = 3;
@@ -32,19 +29,51 @@ public class Board {
         }
     }
 
-    public boolean win() {
-        int count = 0;
+    public boolean winO() {
+        int countH;
+        int countV;
+        int countDLtoR = 0;
+        int countDRtoL = 0;
 
-        //horizontal
         for (int i = 0; i < pieces.length; i++){
+
+            countH = 0;
+            countV = 0;
+
             for (int j = 0; j < pieces.length; j++) {
-                //O
+                //horizontal
                 if (pieces[i][j].equalsSort(Sort.O)){
-                   count++;
+                   countH++;
                 } else{
-                    count = 0
+                    countH = 0;
+                }
+
+                //vertical
+                if (pieces[j][i].equalsSort(Sort.O)){
+                    countV++;
+                } else{
+                    countV = 0;
                 }
             }
+
+            if (countH >= 3 || countV >= 3){
+                return true;
+            }
+
+            //diagonal left to right
+            if (pieces[i][i].equalsSort(Sort.O)){
+                countDLtoR++;
+            } else {
+                countDLtoR = 0;
+            }
+
+            //diagonal right to left
+            if (pieces[pieces.length - 1 - i][i].equalsSort(Sort.O)){
+                countDRtoL++;
+            } else{
+                countDRtoL = 0;
+            }
         }
+        return countDLtoR >= 3 || countDRtoL >= 3;
     }
 }
