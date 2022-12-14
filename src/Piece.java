@@ -35,6 +35,10 @@ public abstract class Piece {
         return id;
     }
 
+    public static void setiD(int iD) {
+        Piece.iD = iD;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

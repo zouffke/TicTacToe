@@ -3,31 +3,36 @@ import java.util.List;
 
 public class Board {
 
-    private static final int LENGTH = 3;
-    private static final int WIDTH = 3;
-    private List<List<Piece>> pieces;
+    private static int width = 3;
+    private static int length = 3;
+    private Piece[][] pieces;
 
-    public Board(){
-        pieces = new ArrayList<>();
+    public Board(int width, int length) {
+        if (width == length && width == 3 || width == 6 || width == 9) {
+            Board.width = width;
+            Board.length = length;
+        } else {
+            Board.width = 3;
+            Board.length = 3;
+        }
+        Piece.setiD(0);
+        pieces = new Piece[Board.width][Board.length];
     }
 
-    public boolean place(int x, int y, Piece piece){
-        if (x > WIDTH){
+    public boolean place(int x, int y, Piece piece) {
+        if (x > Board.width || y > Board.length || x < 0 || y < 0) {
             System.out.println("Dit vak bestaat niet");
             return false;
-        } else if (y > LENGTH) {
-            System.out.println("Dit vak bestaat niet");
-            return false;
-        } else if (pieces.get(x - 1).get(y - 1) != null){
+        } else if (pieces[x][y] != null) {
             System.out.println("Dit vak is a bezet");
             return false;
-        } else{
-            pieces.get(x - 1).add(y - 1, piece);
+        } else {
+            pieces[x][y] = piece;
             return true;
         }
     }
 
-    public boolean win(){
+    public boolean win() {
         int count = 0;
     }
 }
