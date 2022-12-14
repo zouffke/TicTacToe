@@ -34,5 +34,17 @@ public class Board {
 
     public boolean win() {
         int count = 0;
+
+        //horizontal
+        for (int i = 0; i < pieces.length; i++){
+            for (int j = 0; j < pieces.length; j++) {
+                //O
+                if (pieces[i][j].equalsSort(Sort.O)){
+                   count++;
+                } else{
+                    count = 0
+                }
+            }
+        }
     }
 }
