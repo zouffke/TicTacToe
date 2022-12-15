@@ -7,4 +7,12 @@ public enum Sort {
         Random random = new Random();
         return Sort.values()[random.nextInt(2)];
     }
+
+    public static Sort randomSort(Sort sort){
+        if (sort.equals(Sort.O)){
+            return Sort.X;
+        } else{
+            return Sort.O;
+        }
+    }
 }

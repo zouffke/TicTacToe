@@ -29,7 +29,7 @@ public class Board {
         }
     }
 
-    public boolean winO() {
+    public boolean win(Sort sort) {
         int countH;
         int countV;
         int countDLtoR = 0;
@@ -42,14 +42,14 @@ public class Board {
 
             for (int j = 0; j < pieces.length; j++) {
                 //horizontal
-                if (pieces[i][j].equalsSort(Sort.O)){
+                if (pieces[i][j].equalsSort(sort)){
                    countH++;
                 } else{
                     countH = 0;
                 }
 
                 //vertical
-                if (pieces[j][i].equalsSort(Sort.O)){
+                if (pieces[j][i].equalsSort(sort)){
                     countV++;
                 } else{
                     countV = 0;
@@ -61,14 +61,14 @@ public class Board {
             }
 
             //diagonal left to right
-            if (pieces[i][i].equalsSort(Sort.O)){
+            if (pieces[i][i].equalsSort(sort)){
                 countDLtoR++;
             } else {
                 countDLtoR = 0;
             }
 
             //diagonal right to left
-            if (pieces[pieces.length - 1 - i][i].equalsSort(Sort.O)){
+            if (pieces[pieces.length - 1 - i][i].equalsSort(sort)){
                 countDRtoL++;
             } else{
                 countDRtoL = 0;

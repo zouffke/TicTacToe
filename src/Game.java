@@ -1,8 +1,16 @@
+import java.util.Scanner;
+
 public class Game {
     public static void main(String[] args) {
-        Player player1;
+        Contribution contribution;
+        Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("Geef de naam van speler 1: ");
+        System.out.print("Geef de naam van speler 1: ");
+        String name1 = keyboard.nextLine();
+        System.out.print("Geef de naam van speler 2: ");
+        String name2 = keyboard.nextLine();
+
+        contribution = new Contribution(name1, name2);
 
     }
 }
