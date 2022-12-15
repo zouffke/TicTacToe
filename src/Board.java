@@ -74,7 +74,9 @@ public class Board {
 
             for (int j = 0; j < this.pieces.length; j++) {
                 //horizontal
-                if (this.pieces[i][j] == null) {
+                if (countH == 3) {
+                    return true;
+                } else if (this.pieces[i][j] == null) {
                     countH = 0;
                 } else if (this.pieces[i][j].equalsSort(sort)) {
                     countH++;
@@ -83,7 +85,9 @@ public class Board {
                 }
 
                 //vertical
-                if (this.pieces[j][i] == null) {
+                if (countV == 3) {
+                    return true;
+                } else if (this.pieces[j][i] == null) {
                     countV = 0;
                 } else if (this.pieces[j][i].equalsSort(sort)) {
                     countV++;
@@ -97,7 +101,9 @@ public class Board {
             }
 
             //diagonal left to right
-            if (this.pieces[i][i] == null) {
+            if (countDLtoR == 3) {
+                return true;
+            } else if (this.pieces[i][i] == null) {
                 countDLtoR = 0;
             } else if (this.pieces[i][i].equalsSort(sort)) {
                 countDLtoR++;
@@ -106,7 +112,9 @@ public class Board {
             }
 
             //diagonal right to left
-            if (this.pieces[this.pieces.length - 1 - i][i] == null) {
+            if (countDRtoL == 3){
+                return true;
+            }else if (this.pieces[this.pieces.length - 1 - i][i] == null) {
                 countDRtoL = 0;
             } else if (this.pieces[this.pieces.length - 1 - i][i].equalsSort(sort)) {
                 countDRtoL++;
