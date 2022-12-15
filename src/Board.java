@@ -35,45 +35,72 @@ public class Board {
         int countDLtoR = 0;
         int countDRtoL = 0;
 
-        for (int i = 0; i < pieces.length; i++){
+        for (int i = 0; i < pieces.length; i++) {
 
             countH = 0;
             countV = 0;
 
             for (int j = 0; j < pieces.length; j++) {
                 //horizontal
-                if (pieces[i][j].equalsSort(sort)){
-                   countH++;
-                } else{
+                if (pieces[i][j].equalsSort(sort)) {
+                    countH++;
+                } else {
                     countH = 0;
                 }
 
                 //vertical
-                if (pieces[j][i].equalsSort(sort)){
+                if (pieces[j][i].equalsSort(sort)) {
                     countV++;
-                } else{
+                } else {
                     countV = 0;
                 }
             }
 
-            if (countH >= 3 || countV >= 3){
+            if (countH >= 3 || countV >= 3) {
                 return true;
             }
 
             //diagonal left to right
-            if (pieces[i][i].equalsSort(sort)){
+            if (pieces[i][i].equalsSort(sort)) {
                 countDLtoR++;
             } else {
                 countDLtoR = 0;
             }
 
             //diagonal right to left
-            if (pieces[pieces.length - 1 - i][i].equalsSort(sort)){
+            if (pieces[pieces.length - 1 - i][i].equalsSort(sort)) {
                 countDRtoL++;
-            } else{
+            } else {
                 countDRtoL = 0;
             }
         }
         return countDLtoR >= 3 || countDRtoL >= 3;
+    }
+
+    public void draw() {
+        StringBuilder stringBuilder = new StringBuilder("_______________\n|             |\n");
+        for (int i = 0; i < pieces.length; i++) {
+            stringBuilder.append("|  ");
+            for (int j = 0; j < pieces.length; j++) {
+                if (pieces[i][j] == null) {
+                    stringBuilder.append(" ");
+                } else {
+                    stringBuilder.append(pieces[i][j]);
+                }
+                if (j == 2) {
+                    stringBuilder.append("   |\n");
+                } else{
+                    stringBuilder.append(" |");
+                }
+            }
+            if (i == 2){
+                stringBuilder.append("|_____________|");
+            } else{
+            stringBuilder.append("| ~~~~~~~~~~~ |\n");
+            }
+        }
+
+
+        System.out.print(stringBuilder);
     }
 }

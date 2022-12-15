@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public abstract class Piece {
+public class Piece {
 
     private Sort sort;
     private int x;
