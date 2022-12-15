@@ -11,5 +11,11 @@ public class Contribution {
         sorts[1] = Sort.randomSort(sorts[0]);
     }
 
+    public String getSort(int index){
+        return String.format("%s", sorts[index - 1]);
+    }
 
+    public String getName(int index){
+        return players[index - 1].getName();
+    }
 }

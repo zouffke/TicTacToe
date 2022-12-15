@@ -55,4 +55,9 @@ public class Piece {
     public boolean equalsSort(Sort sort){
         return this.getSort().equals(sort);
     }
+
+    @Override
+    public String toString(){
+        return String.format("%s", this.getSort());
+    }
 }
