@@ -1,14 +1,12 @@
-import java.util.List;
-
 public class Player {
-    private String name;
+    private final String NAME;
 
     public Player(String name){
-        this.name = name;
+        this.NAME = name;
     }
 
-    public String getName(){
-        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    public String getNAME(){
+        return NAME.substring(0, 1).toUpperCase() + NAME.substring(1).toLowerCase();
     }
 
 }

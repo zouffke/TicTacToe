@@ -2,7 +2,7 @@ public class Board {
 
     private static int width = 3;
     private static int length = 3;
-    private Piece[][] pieces;
+    private final Piece[][] pieces;
     private int count = 1;
 
     public Board(int width, int length) {
@@ -13,8 +13,8 @@ public class Board {
             Board.width = 3;
             Board.length = 3;
         }
-        Piece.setiD(0);
-        pieces = new Piece[Board.width][Board.length];
+        Piece.setId(0);
+        this.pieces = new Piece[Board.width][Board.length];
     }
 
     public boolean place(int index) {
@@ -25,42 +25,36 @@ public class Board {
         int x = 0;
         int y = 0;
         switch (index) {
-            case 2:
-                y = 1;
-                break;
-            case 3:
-                y = 2;
-                break;
-            case 4:
-                x = 1;
-                break;
-            case 5:
+            case 2 -> y = 1;
+            case 3 -> y = 2;
+            case 4 -> x = 1;
+            case 5 -> {
                 x = 1;
                 y = 1;
-                break;
-            case 6:
+            }
+            case 6 -> {
                 x = 1;
                 y = 2;
-                break;
-            case 7:
-                x = 2;
-            case 8:
+            }
+            case 7 -> x = 2;
+            case 8 -> {
                 x = 2;
                 y = 1;
-                break;
-            case 9:
+            }
+            case 9 -> {
                 x = 2;
                 y = 2;
+            }
         }
-        if (pieces[x][y] != null) {
+        if (this.pieces[x][y] != null) {
             System.out.println("Dit vak is al bezet");
             return false;
         } else {
             if (this.count % 2 != 0) {
-                pieces[x][y] = new Piece(Sort.X, x, y);
+                this.pieces[x][y] = new Piece(Sort.X, x, y);
                 this.count++;
             } else {
-                pieces[x][y] = new Piece(Sort.O, x, y);
+                this.pieces[x][y] = new Piece(Sort.O, x, y);
                 this.count = 1;
             }
             return true;
@@ -73,25 +67,25 @@ public class Board {
         int countDLtoR = 0;
         int countDRtoL = 0;
 
-        for (int i = 0; i < pieces.length; i++) {
+        for (int i = 0; i < this.pieces.length; i++) {
 
             countH = 0;
             countV = 0;
 
-            for (int j = 0; j < pieces.length; j++) {
+            for (int j = 0; j < this.pieces.length; j++) {
                 //horizontal
-                if (pieces[i][j] == null) {
+                if (this.pieces[i][j] == null) {
                     countH = 0;
-                } else if (pieces[i][j].equalsSort(sort)) {
+                } else if (this.pieces[i][j].equalsSort(sort)) {
                     countH++;
                 } else {
                     countH = 0;
                 }
 
                 //vertical
-                if (pieces[j][i] == null) {
+                if (this.pieces[j][i] == null) {
                     countV = 0;
-                } else if (pieces[j][i].equalsSort(sort)) {
+                } else if (this.pieces[j][i].equalsSort(sort)) {
                     countV++;
                 } else {
                     countV = 0;
@@ -103,18 +97,18 @@ public class Board {
             }
 
             //diagonal left to right
-            if (pieces[i][i] == null) {
+            if (this.pieces[i][i] == null) {
                 countDLtoR = 0;
-            } else if (pieces[i][i].equalsSort(sort)) {
+            } else if (this.pieces[i][i].equalsSort(sort)) {
                 countDLtoR++;
             } else {
                 countDLtoR = 0;
             }
 
             //diagonal right to left
-            if (pieces[pieces.length - 1 - i][i] == null) {
+            if (this.pieces[this.pieces.length - 1 - i][i] == null) {
                 countDRtoL = 0;
-            } else if (pieces[pieces.length - 1 - i][i].equalsSort(sort)) {
+            } else if (this.pieces[this.pieces.length - 1 - i][i].equalsSort(sort)) {
                 countDRtoL++;
             } else {
                 countDRtoL = 0;
@@ -124,19 +118,27 @@ public class Board {
     }
 
     public boolean draw() {
-        return Piece.getiD() == pieces.length;
+        return Piece.getId() == Board.getLength() * Board.getWidth();
+    }
+
+    public static int getWidth() {
+        return Board.width;
+    }
+
+    public static int getLength() {
+        return Board.length;
     }
 
     public void drawBoard() {
         int count = 1;
         StringBuilder stringBuilder = new StringBuilder("_______________\n|             |\n");
-        for (int i = 0; i < pieces.length; i++) {
+        for (int i = 0; i < this.pieces.length; i++) {
             stringBuilder.append("|  ");
-            for (int j = 0; j < pieces.length; j++) {
-                if (pieces[i][j] == null) {
+            for (int j = 0; j < this.pieces.length; j++) {
+                if (this.pieces[i][j] == null) {
                     stringBuilder.append(count++);
                 } else {
-                    stringBuilder.append(pieces[i][j]);
+                    stringBuilder.append(this.pieces[i][j]);
                     count++;
                 }
                 if (j == 2) {
@@ -151,8 +153,6 @@ public class Board {
                 stringBuilder.append("| ~~~~~~~~~~~ |\n");
             }
         }
-
-
         System.out.print(stringBuilder);
     }
 }

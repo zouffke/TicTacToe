@@ -2,41 +2,29 @@ import java.util.Objects;
 
 public class Piece {
 
-    private Sort sort;
-    private int x;
-    private int y;
-    private static int iD = 0;
-    private int id;
+    private final Sort SORT;
+    private final int X;
+    private final int Y;
+    private static int id = 0;
+    private final int ID;
 
     public Piece(Sort sort, int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.sort = sort;
-        this.id = iD++;
+        this.X = x;
+        this.Y = y;
+        this.SORT = sort;
+        this.ID = id++;
     }
 
-    public Sort getSort() {
-        return sort;
+    public Sort getSORT() {
+        return SORT;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public static int getiD() {
-        return iD;
-    }
-
-    public int getId() {
+    public static int getId() {
         return id;
     }
 
-    public static void setiD(int iD) {
-        Piece.iD = iD;
+    public static void setId(int id) {
+        Piece.id = id;
     }
 
     @Override
@@ -44,20 +32,20 @@ public class Piece {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Piece piece = (Piece) o;
-        return x == piece.x && y == piece.y && id == piece.id && sort == piece.sort;
+        return X == piece.X && Y == piece.Y && ID == piece.ID && SORT == piece.SORT;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sort, x, y, id);
+        return Objects.hash(SORT, X, Y, ID);
     }
 
     public boolean equalsSort(Sort sort){
-        return this.getSort().equals(sort);
+        return this.getSORT().equals(sort);
     }
 
     @Override
     public String toString(){
-        return String.format("%s", this.getSort());
+        return String.format("%s", this.getSORT());
     }
 }
