@@ -5,21 +5,34 @@ public class Game {
         Contribution contribution;
         Scanner keyboard = new Scanner(System.in);
         Board board = new Board(3, 3);
-        boolean validMove;
-        int count = 1;
-        boolean end;
+
+
+        contribution = getPlayers(keyboard);
+
+        play(contribution, board, keyboard);
+
+    }
+
+    public static Contribution getPlayers(Scanner keyboard){
         String name1;
         String name2;
+
         do {
             System.out.print("Geef de naam van speler 1: ");
             name1 = keyboard.nextLine();
         } while (name1.isEmpty() || !Character.isAlphabetic(name1.charAt(0)));
         do {
             System.out.print("Geef de naam van speler 2: ");
-             name2 = keyboard.nextLine();
+            name2 = keyboard.nextLine();
         } while (name2.isEmpty() || !Character.isAlphabetic(name2.charAt(0)));
 
-        contribution = new Contribution(name1, name2);
+        return new Contribution(name1, name2);
+    }
+
+    public static void play(Contribution contribution, Board board, Scanner keyboard){
+        int count = 1;
+        boolean validMove;
+        boolean end;
 
         System.out.printf("%s speelt met %s\n", contribution.getName(1), contribution.getSort(1));
         System.out.printf("en\n%s speelt met %s\n", contribution.getName(2), contribution.getSort(2));
