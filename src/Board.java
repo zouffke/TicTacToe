@@ -112,9 +112,9 @@ public class Board {
             }
 
             //diagonal right to left
-            if (countDRtoL == 3){
+            if (countDRtoL == 3) {
                 return true;
-            }else if (this.pieces[this.pieces.length - 1 - i][i] == null) {
+            } else if (this.pieces[this.pieces.length - 1 - i][i] == null) {
                 countDRtoL = 0;
             } else if (this.pieces[this.pieces.length - 1 - i][i].equalsSort(sort)) {
                 countDRtoL++;
@@ -138,21 +138,32 @@ public class Board {
     }
 
     public void drawBoard() {
-        int count = 1;
+        int count = 0;
         StringBuilder stringBuilder = new StringBuilder("_______________\n|             |\n");
         for (int i = 0; i < this.pieces.length; i++) {
-            stringBuilder.append("|  ");
+            if (this.pieces[i][count++] == null) {
+                stringBuilder.append("| ");
+            } else {
+                stringBuilder.append("| ");
+            }
             for (int j = 0; j < this.pieces.length; j++) {
                 if (this.pieces[i][j] == null) {
-                    stringBuilder.append(count++);
+                    stringBuilder.append(i + 1).append(" ").append(j + 1);
                 } else {
-                    stringBuilder.append(this.pieces[i][j]);
-                    count++;
+                    stringBuilder.append(" ").append(this.pieces[i][j]);
                 }
                 if (j == 2) {
-                    stringBuilder.append("  |\n");
+                    if (pieces[i][j] == null) {
+                        stringBuilder.append(" |\n");
+                    } else {
+                        stringBuilder.append("  |\n");
+                    }
                 } else {
-                    stringBuilder.append(" | ");
+                    if (pieces[i][j] == null) {
+                        stringBuilder.append("|");
+                    } else {
+                        stringBuilder.append(" |");
+                    }
                 }
             }
             if (i == 2) {
