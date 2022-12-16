@@ -17,6 +17,7 @@ public class Board {
         this.pieces = new Piece[Board.width][Board.length];
     }
 
+    //TODO change the function so it works with a bigger board, cords will be given instead of a whole number
     public boolean place(int index) {
         if (index < 1 || index > 9) {
             System.out.println("Dit vak bestaat niet");
