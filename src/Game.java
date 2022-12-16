@@ -32,7 +32,7 @@ public class Game {
     public static void play(Contribution contribution, Board board, Scanner keyboard){
         int count = 1;
         boolean validMove;
-        boolean end;
+
 
         System.out.printf("%s speelt met %s\n", contribution.getName(1), contribution.getSort(1));
         System.out.printf("en\n%s speelt met %s\n", contribution.getName(2), contribution.getSort(2));
@@ -40,10 +40,11 @@ public class Game {
         board.drawBoard();
 
         do {
-            if (count % 2 != 0) {
+            if (count++ % 2 != 0) {
                 System.out.printf("\n%s's beurt;\n", contribution.getSort(1).equals("X") ? contribution.getName(1) : contribution.getName(2));
             } else {
                 System.out.printf("\n%s's beurt;\n", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
+                count = 1;
             }
 
             do {
@@ -52,24 +53,26 @@ public class Game {
             } while (!validMove);
 
             board.drawBoard();
-            end = board.draw();
 
-            if (end) {
-                System.out.println("It's a Draw!");
-            } else if (count % 2 != 0) {
-                end = board.win(Sort.X);
-                if (end) {
-                    System.out.printf("%s heeft gewonnen", contribution.getSort(1).equals("X") ? contribution.getName(1) : contribution.getName(2));
-                }
-                count++;
-            } else {
-                end = board.win(Sort.O);
-                if (end) {
-                    System.out.printf("%s heeft gewonen", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
-                }
-                count = 1;
+        } while (!winCheck(board, count, contribution));
+    }
+
+    public static boolean winCheck(Board board, int count, Contribution contribution){
+
+        if (board.draw()) {
+            System.out.println("It's a Draw!");
+            return true;
+        } else if (count % 2 == 0) {
+            if (board.win(Sort.X)) {
+                System.out.printf("%s heeft gewonnen", contribution.getSort(1).equals("X") ? contribution.getName(1) : contribution.getName(2));
+                return true;
             }
-
-        } while (!end);
+        } else {
+            if (board.win(Sort.O)) {
+                System.out.printf("%s heeft gewonen", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
+                return true;
+            }
+        }
+        return false;
     }
 }
