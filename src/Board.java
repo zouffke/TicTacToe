@@ -17,35 +17,16 @@ public class Board {
         this.pieces = new Piece[Board.width][Board.length];
     }
 
-    //TODO change the function so it works with a bigger board, cords will be given instead of a whole number
-    public boolean place(int index) {
-        if (index < 1 || index > 9) {
-            System.out.println("Dit vak bestaat niet");
+    public boolean place(String index) {
+        int x = Integer.parseInt(index.substring(0, 1));
+        int y = Integer.parseInt(index.substring(2, 3));
+
+        if (x < 1 || x > getWidth() || y < 1 || y > getLength()){
+            System.out.println("Dit veld bestaat niet");
             return false;
-        }
-        int x = 0;
-        int y = 0;
-        switch (index) {
-            case 2 -> y = 1;
-            case 3 -> y = 2;
-            case 4 -> x = 1;
-            case 5 -> {
-                x = 1;
-                y = 1;
-            }
-            case 6 -> {
-                x = 1;
-                y = 2;
-            }
-            case 7 -> x = 2;
-            case 8 -> {
-                x = 2;
-                y = 1;
-            }
-            case 9 -> {
-                x = 2;
-                y = 2;
-            }
+        } else{
+            x--;
+            y--;
         }
         if (this.pieces[x][y] != null) {
             System.out.println("Dit vak is al bezet");
@@ -156,7 +137,7 @@ public class Board {
             }
             for (int j = 0; j < this.pieces.length; j++) {
                 if (this.pieces[i][j] == null) {
-                    stringBuilder.append(i + 1).append(" ").append(j + 1);
+                    stringBuilder.append(i + 1).append("-").append(j + 1);
                 } else {
                     stringBuilder.append(" ").append(this.pieces[i][j]);
                 }

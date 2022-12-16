@@ -13,7 +13,7 @@ public class Game {
 
     }
 
-    public static Contribution getPlayers(Scanner keyboard){
+    public static Contribution getPlayers(Scanner keyboard) {
         String name1;
         String name2;
 
@@ -29,10 +29,10 @@ public class Game {
         return new Contribution(name1, name2);
     }
 
-    public static void play(Contribution contribution, Board board, Scanner keyboard){
+    public static void play(Contribution contribution, Board board, Scanner keyboard) {
         int count = 1;
-        boolean validMove;
-
+        boolean validMove = false;
+        String input;
 
         System.out.printf("%s speelt met %s\n", contribution.getName(1), contribution.getSort(1));
         System.out.printf("en\n%s speelt met %s\n", contribution.getName(2), contribution.getSort(2));
@@ -49,7 +49,18 @@ public class Game {
 
             do {
                 System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
-                validMove = board.place(keyboard.nextInt());
+                input = keyboard.nextLine();
+
+                if (!input.isEmpty() || !input.matches("[0-9]" + "-" + "[0-9]")){
+                    validMove = true;
+                }
+
+                if (validMove) {
+                   validMove = board.place(input);
+                } else {
+                    System.out.println("Verkeerde notatie");
+                }
+
             } while (!validMove);
 
             board.drawBoard();
@@ -57,7 +68,7 @@ public class Game {
         } while (!winCheck(board, count, contribution));
     }
 
-    public static boolean winCheck(Board board, int count, Contribution contribution){
+    public static boolean winCheck(Board board, int count, Contribution contribution) {
 
         if (board.draw()) {
             System.out.println("It's a Draw!");
