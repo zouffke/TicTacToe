@@ -8,11 +8,16 @@ public class Game {
         boolean validMove;
         int count = 1;
         boolean end;
-
-        System.out.print("Geef de naam van speler 1: ");
-        String name1 = keyboard.nextLine();
-        System.out.print("Geef de naam van speler 2: ");
-        String name2 = keyboard.nextLine();
+        String name1;
+        String name2;
+        do {
+            System.out.print("Geef de naam van speler 1: ");
+            name1 = keyboard.nextLine();
+        } while (name1.isEmpty() || !Character.isAlphabetic(name1.charAt(0)));
+        do {
+            System.out.print("Geef de naam van speler 2: ");
+             name2 = keyboard.nextLine();
+        } while (name2.isEmpty() || !Character.isAlphabetic(name2.charAt(0)));
 
         contribution = new Contribution(name1, name2);
 
