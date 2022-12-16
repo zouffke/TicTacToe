@@ -4,7 +4,7 @@ public class Game {
     public static void main(String[] args) {
         Contribution contribution;
         Scanner keyboard = new Scanner(System.in);
-        Board board = new Board(3, 3);
+        Board board = new Board(9, 9);
 
 
         contribution = getPlayers(keyboard);

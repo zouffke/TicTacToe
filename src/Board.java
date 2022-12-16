@@ -140,7 +140,14 @@ public class Board {
 
     public void drawBoard() {
         int count = 0;
-        StringBuilder stringBuilder = new StringBuilder("_______________\n|             |\n");
+        StringBuilder stringBuilder = new StringBuilder();
+        if (getLength() == 3) {
+            stringBuilder.append("_".repeat(15)).append("\n").append("|").append(" ".repeat(13)).append("|\n");
+        } else if (getLength() == 6) {
+            stringBuilder.append("_".repeat(27)).append("\n").append("|").append(" ".repeat(25)).append("|\n");
+        } else {
+            stringBuilder.append("_".repeat(39)).append("\n").append("|").append(" ".repeat(37)).append("|\n");
+        }
         for (int i = 0; i < this.pieces.length; i++) {
             if (this.pieces[i][count++] == null) {
                 stringBuilder.append("| ");
@@ -153,7 +160,7 @@ public class Board {
                 } else {
                     stringBuilder.append(" ").append(this.pieces[i][j]);
                 }
-                if (j == 2) {
+                if (j == getWidth() - 1) {
                     if (pieces[i][j] == null) {
                         stringBuilder.append(" |\n");
                     } else {
@@ -167,10 +174,22 @@ public class Board {
                     }
                 }
             }
-            if (i == 2) {
-                stringBuilder.append("|_____________|\n");
+            if (i == getLength() - 1) {
+                if (getLength() == 3) {
+                    stringBuilder.append("|").append("_".repeat(13)).append("|\n");
+                } else if (getLength() == 6) {
+                    stringBuilder.append("|").append("_".repeat(25)).append("|\n");
+                } else {
+                    stringBuilder.append("|").append("_".repeat(37)).append("|\n");
+                }
             } else {
-                stringBuilder.append("| ~~~~~~~~~~~ |\n");
+                if (getLength() == 3) {
+                    stringBuilder.append("| ").append("~".repeat(11)).append(" |\n");
+                } else if (getLength() == 6) {
+                    stringBuilder.append("| ").append("~".repeat(23)).append(" |\n");
+                } else {
+                    stringBuilder.append("| ").append("~".repeat(35)).append(" |\n");
+                }
             }
         }
         System.out.print(stringBuilder);
