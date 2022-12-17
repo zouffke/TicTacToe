@@ -111,4 +111,14 @@ public class Game {
         }
         return false;
     }
+    public boolean nogEens(Scanner keyboard){
+        System.out.print("Wilt u nog eens spelen? Y/N");
+        String antwoord = keyboard.nextLine();
+        if (antwoord.equals("Y") || antwoord.equals("y")){
+            return true;
+        }else if (antwoord.equals("N") || antwoord.equals("n")){
+            return false;
+        }
+        return false;
+    }
 }
