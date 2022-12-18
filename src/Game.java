@@ -96,59 +96,66 @@ public class Game {
         int count = 1;
         boolean validMove;
         String input;
+        Player currentPlayer;
+
+        contribution.setSorts();
 
         System.out.printf("\n%s speelt met %s\n", contribution.getName(1), contribution.getSort(1));
         System.out.printf("en\n%s speelt met %s\n", contribution.getName(2), contribution.getSort(2));
 
         board.drawBoard();
 
+        keyboard.nextLine();
+
         do {
-            if (count++ % 2 != 0) {
-                System.out.printf("\n%s's beurt;\n", contribution.getSort(1).equals("X") ? contribution.getName(1) : contribution.getName(2));
+            if (count++ == 1) {
+                currentPlayer = contribution.getSort(1).equals("X") ? contribution.getPlayer(1) : contribution.getPlayer(2);
+                System.out.printf("\n%s's beurt;\n", currentPlayer.getNAME());
             } else {
-                System.out.printf("\n%s's beurt;\n", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
+                currentPlayer = contribution.getSort(1).equals("O") ? contribution.getPlayer(1) : contribution.getPlayer(2);
+                System.out.printf("\n%s's beurt;\n", currentPlayer.getNAME());
                 count = 1;
             }
 
-            keyboard.nextLine();
+            if (currentPlayer instanceof NPC npc) {
+                npc.playNPC(board);
+            } else {
 
-            do {
-                validMove = false;
-                System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
-                input = keyboard.nextLine();
-                if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")) {
-                    validMove = true;
-                }
+                do {
+                    validMove = false;
+                    System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
+                    input = keyboard.nextLine();
+                    if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")) {
+                        validMove = true;
+                    }
 
-                if (validMove) {
-                    validMove = board.place(input);
-                } else {
-                    System.out.println("Verkeerde notatie");
-                }
+                    if (validMove) {
+                        validMove = board.place(input, true);
+                    } else {
+                        System.out.println("Verkeerde notatie");
+                    }
 
-            } while (!validMove);
+                } while (!validMove);
+            }
 
             board.drawBoard();
 
-        } while (!winCheck(board, count, contribution));
+        } while (!winCheck(board, currentPlayer, contribution));
     }
 
-    public static boolean winCheck(Board board, int count, Contribution contribution) {
+    public static boolean winCheck(Board board, Player currentPlayer, Contribution contribution) {
 
         if (board.draw()) {
             System.out.println("It's a Draw!\n");
             return true;
-        } else if (count % 2 == 0) {
-            if (board.win(Sort.X)) {
-                System.out.printf("%s heeft gewonnen\n", contribution.getSort(1).equals("X") ? contribution.getName(1) : contribution.getName(2));
-                return true;
-            }
-        } else {
-            if (board.win(Sort.O)) {
-                System.out.printf("%s heeft gewonen\n", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
-                return true;
-            }
+        } else if (board.win(Sort.X)) {
+            System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
+            return true;
+        } else if (board.win(Sort.O)) {
+            System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
+            return true;
         }
+
         return false;
     }
 

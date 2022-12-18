@@ -13,16 +13,22 @@ public class Contribution {
     public Contribution(String name){
         PLAYERS = new Player[]{new Human(name), new NPC()};
         SORTS = new Sort[2];
-        //random sort toekennen.
-        SORTS[0] = Sort.randomSort();
-        SORTS[1] = Sort.randomSort(SORTS[0]);
     }
 
-    public String getSort(int index){
+    public String getSort(int index) {
         return String.format("%s", SORTS[index - 1]);
     }
 
     public String getName(int index){
         return PLAYERS[index - 1].getNAME();
+    }
+
+    public Player getPlayer(int index){
+        return PLAYERS[index - 1];
+    }
+
+    public void setSorts(){
+        SORTS[0] = Sort.randomSort();
+        SORTS[1] = Sort.randomSort(SORTS[0]);
     }
 }
