@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Game {
     public static void main(String[] args) {
@@ -118,7 +119,12 @@ public class Game {
             }
 
             if (currentPlayer instanceof NPC npc) {
-                npc.playNPC(board);
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                    npc.playNPC(board);
+                } catch (InterruptedException ex){
+                    ex.printStackTrace();
+                }
             } else {
 
                 do {
@@ -140,10 +146,10 @@ public class Game {
 
             board.drawBoard();
 
-        } while (!winCheck(board, currentPlayer, contribution));
+        } while (!winCheck(board, currentPlayer));
     }
 
-    public static boolean winCheck(Board board, Player currentPlayer, Contribution contribution) {
+    public static boolean winCheck(Board board, Player currentPlayer) {
 
         if (board.draw()) {
             System.out.println("It's a Draw!\n");

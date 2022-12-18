@@ -18,6 +18,7 @@ public class NPC extends Player {
         Random random = new Random();
         boolean validMove;
 
+        //TODO NPC seems to not reach all the places
         do {
             stringBuilder= new StringBuilder();
             stringBuilder.append(random.nextInt(length) + 1).append("-").append(random.nextInt(width-1) + 1);
