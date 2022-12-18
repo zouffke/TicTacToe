@@ -22,7 +22,7 @@ public class Game {
     public static Board setBoard(Scanner keyboard) {
         int choice;
 
-        System.out.print("Kies het soort bord dat u wilt gebruiken:\n1: 3x3\n2: 6x6\n3: 9x9\n\tKeuze: ");
+        System.out.print("Kies het soort bord dat u wilt gebruiken:\n1: 3x3\n2: 6x6\n3: 7x7\n4: 9x9\n\tKeuze: ");
         choice = keyboard.nextInt();
 
         switch (choice) {
@@ -33,6 +33,9 @@ public class Game {
                 return new Board(6, 6);
             }
             case 3 -> {
+                return new Board(7, 7);
+            }
+            case 4 -> {
                 return new Board(9, 9);
             }
             default -> {
