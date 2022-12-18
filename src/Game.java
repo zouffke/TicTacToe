@@ -5,16 +5,21 @@ public class Game {
         Contribution contribution;
         Scanner keyboard = new Scanner(System.in);
         Board board;
+        boolean loop;
 
-        board = setBoard(keyboard);
+        do {
+            board = setBoard(keyboard);
 
-        contribution = getPlayers(keyboard);
+            contribution = getPlayers(keyboard);
 
-        play(contribution, board, keyboard);
+            play(contribution, board, keyboard);
 
+            loop = again(keyboard);
+
+        } while (loop);
     }
 
-    public static Board setBoard(Scanner keyboard){
+    public static Board setBoard(Scanner keyboard) {
         int choice;
 
         System.out.print("Kies het soort bord dat u wilt gebruiken:\n1: 3x3\n2: 6x6\n3: 9x9\n\tKeuze: ");
@@ -76,12 +81,12 @@ public class Game {
                 validMove = false;
                 System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
                 input = keyboard.nextLine();
-                if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")){
+                if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")) {
                     validMove = true;
                 }
 
                 if (validMove) {
-                   validMove = board.place(input);
+                    validMove = board.place(input);
                 } else {
                     System.out.println("Verkeerde notatie");
                 }
@@ -96,29 +101,25 @@ public class Game {
     public static boolean winCheck(Board board, int count, Contribution contribution) {
 
         if (board.draw()) {
-            System.out.println("It's a Draw!");
+            System.out.println("It's a Draw!\n");
             return true;
         } else if (count % 2 == 0) {
             if (board.win(Sort.X)) {
-                System.out.printf("%s heeft gewonnen", contribution.getSort(1).equals("X") ? contribution.getName(1) : contribution.getName(2));
+                System.out.printf("%s heeft gewonnen\n", contribution.getSort(1).equals("X") ? contribution.getName(1) : contribution.getName(2));
                 return true;
             }
         } else {
             if (board.win(Sort.O)) {
-                System.out.printf("%s heeft gewonen", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
+                System.out.printf("%s heeft gewonen\n", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
                 return true;
             }
         }
         return false;
     }
-    public boolean nogEens(Scanner keyboard){
-        System.out.print("Wilt u nog eens spelen? Y/N");
-        String antwoord = keyboard.nextLine();
-        if (antwoord.equals("Y") || antwoord.equals("y")){
-            return true;
-        }else if (antwoord.equals("N") || antwoord.equals("n")){
-            return false;
-        }
-        return false;
+
+    public static boolean again(Scanner keyboard) {
+        System.out.println("\nWilt u nog eens spelen? Y/N");
+        return keyboard.nextLine().toUpperCase().contains("Y");
     }
 }
+
