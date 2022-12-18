@@ -6,7 +6,7 @@ public class Board {
     private int count = 1;
 
     public Board(int width, int length) {
-        if (width == length && width == 3 || width == 6 || width == 9) {
+        if (width == length && width == 3 || width == 6 || width == 7 || width == 9) {
             Board.width = width;
             Board.length = length;
         } else {
@@ -21,10 +21,10 @@ public class Board {
         int x = Integer.parseInt(index.substring(0, 1));
         int y = Integer.parseInt(index.substring(2, 3));
 
-        if (x < 1 || x > getWidth() || y < 1 || y > getLength()){
+        if (x < 1 || x > getWidth() || y < 1 || y > getLength()) {
             System.out.println("Dit veld bestaat niet");
             return false;
-        } else{
+        } else {
             x--;
             y--;
         }
@@ -48,6 +48,13 @@ public class Board {
         int countV;
         int countDLtoR = 0;
         int countDRtoL = 0;
+        int winCount;
+
+        if (getLength() == 3){
+            winCount = 3;
+        }else {
+            winCount = 4;
+        }
 
         for (int i = 0; i < this.pieces.length; i++) {
 
@@ -56,7 +63,7 @@ public class Board {
 
             for (int j = 0; j < this.pieces.length; j++) {
                 //horizontal
-                if (countH == 3) {
+                if (countH == winCount) {
                     return true;
                 } else if (this.pieces[i][j] == null) {
                     countH = 0;
@@ -67,7 +74,7 @@ public class Board {
                 }
 
                 //vertical
-                if (countV == 3) {
+                if (countV == winCount) {
                     return true;
                 } else if (this.pieces[j][i] == null) {
                     countV = 0;
@@ -78,12 +85,12 @@ public class Board {
                 }
             }
 
-            if (countH >= 3 || countV >= 3) {
+            if (countH >= winCount || countV >= winCount) {
                 return true;
             }
 
             //diagonal left to right
-            if (countDLtoR == 3) {
+            if (countDLtoR == winCount) {
                 return true;
             } else if (this.pieces[i][i] == null) {
                 countDLtoR = 0;
@@ -94,7 +101,7 @@ public class Board {
             }
 
             //diagonal right to left
-            if (countDRtoL == 3) {
+            if (countDRtoL == winCount) {
                 return true;
             } else if (this.pieces[this.pieces.length - 1 - i][i] == null) {
                 countDRtoL = 0;
@@ -104,7 +111,7 @@ public class Board {
                 countDRtoL = 0;
             }
         }
-        return countDLtoR >= 3 || countDRtoL >= 3;
+        return countDLtoR >= winCount || countDRtoL >= winCount;
     }
 
     public boolean draw() {
@@ -126,6 +133,8 @@ public class Board {
             stringBuilder.append("_".repeat(15)).append("\n").append("|").append(" ".repeat(13)).append("|\n");
         } else if (getLength() == 6) {
             stringBuilder.append("_".repeat(27)).append("\n").append("|").append(" ".repeat(25)).append("|\n");
+        } else if (getLength() == 7) {
+            stringBuilder.append("_".repeat(31)).append("\n").append("|").append(" ".repeat(29)).append("|\n");
         } else {
             stringBuilder.append("_".repeat(39)).append("\n").append("|").append(" ".repeat(37)).append("|\n");
         }
@@ -160,6 +169,8 @@ public class Board {
                     stringBuilder.append("|").append("_".repeat(13)).append("|\n");
                 } else if (getLength() == 6) {
                     stringBuilder.append("|").append("_".repeat(25)).append("|\n");
+                } else if (getLength() == 7) {
+                    stringBuilder.append("|").append("_".repeat(29)).append("|\n");
                 } else {
                     stringBuilder.append("|").append("_".repeat(37)).append("|\n");
                 }
@@ -168,6 +179,8 @@ public class Board {
                     stringBuilder.append("| ").append("~".repeat(11)).append(" |\n");
                 } else if (getLength() == 6) {
                     stringBuilder.append("| ").append("~".repeat(23)).append(" |\n");
+                } else if (getLength() == 7) {
+                    stringBuilder.append("| ").append("~".repeat(27)).append(" |\n");
                 } else {
                     stringBuilder.append("| ").append("~".repeat(35)).append(" |\n");
                 }
