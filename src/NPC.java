@@ -1,10 +1,12 @@
-public class NPC {
-    private static String name;
-    public NPC (String name){
-        NPC.name = name;
+public class NPC extends Player{
+
+    public NPC() {
+        super("Bot");
     }
 
-    public static void setName(String name) {
-        NPC.name = name;
+    @Override
+    public String getNAME() {
+        return super.getNAME();
     }
+
 }

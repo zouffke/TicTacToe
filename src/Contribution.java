@@ -4,9 +4,16 @@ public class Contribution {
     private final Sort[] SORTS;
 
     public Contribution(String name1, String name2){
-        PLAYERS = new Player[]{new Player(name1), new Player(name2)};
+        PLAYERS = new Player[]{new Human(name1), new Human(name2)};
         SORTS = new Sort[2];
        //random sort toekennen.
+        SORTS[0] = Sort.randomSort();
+        SORTS[1] = Sort.randomSort(SORTS[0]);
+    }
+    public Contribution(String name){
+        PLAYERS = new Player[]{new Human(name), new NPC()};
+        SORTS = new Sort[2];
+        //random sort toekennen.
         SORTS[0] = Sort.randomSort();
         SORTS[1] = Sort.randomSort(SORTS[0]);
     }
