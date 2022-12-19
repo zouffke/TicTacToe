@@ -67,22 +67,22 @@ public class Game {
     }
 
     public static Board setBoard(Scanner keyboard) {
-        int choice;
+        String choice;
 
         System.out.print("\nKies het soort bord dat u wilt gebruiken:\n1: 3x3\n2: 6x6\n3: 7x7\n4: 9x9\n\tKeuze: ");
-        choice = keyboard.nextInt();
+        choice = keyboard.nextLine();
 
         switch (choice) {
-            case 1 -> {
+            case "1" -> {
                 return new Board(3, 3);
             }
-            case 2 -> {
+            case "2" -> {
                 return new Board(6, 6);
             }
-            case 3 -> {
+            case "3" -> {
                 return new Board(7, 7);
             }
-            case 4 -> {
+            case "4" -> {
                 return new Board(9, 9);
             }
             default -> {
@@ -106,8 +106,6 @@ public class Game {
 
         board.drawBoard();
 
-        keyboard.nextLine();
-
         do {
             if (count++ == 1) {
                 currentPlayer = contribution.getSort(1).equals("X") ? contribution.getPlayer(1) : contribution.getPlayer(2);
@@ -120,8 +118,8 @@ public class Game {
 
             if (currentPlayer instanceof NPC npc) {
                 try {
-                    TimeUnit.SECONDS.sleep(2);
-                    npc.playNPC(board);
+                    TimeUnit.SECONDS.sleep(1);
+                    npc.playNPC(board, count);
                 } catch (InterruptedException ex){
                     ex.printStackTrace();
                 }
@@ -154,10 +152,10 @@ public class Game {
         if (board.draw()) {
             System.out.println("It's a Draw!\n");
             return true;
-        } else if (board.win(Sort.X)) {
+        } else if (board.win(Sort.X, false)) {
             System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
             return true;
-        } else if (board.win(Sort.O)) {
+        } else if (board.win(Sort.O, false)) {
             System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
             return true;
         }

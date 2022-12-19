@@ -47,7 +47,7 @@ public class Board {
         }
     }
 
-    public boolean win(Sort sort) {
+    public boolean win(Sort sort, boolean check) {
         int countH;
         int countV;
         int countDLtoR = 0;
@@ -55,9 +55,17 @@ public class Board {
         int winCount;
 
         if (getLength() == 3) {
-            winCount = 3;
+            if (check) {
+                winCount = 2;
+            } else {
+                winCount = 3;
+            }
         } else {
-            winCount = 4;
+            if (check) {
+                winCount = 3;
+            } else {
+                winCount = 4;
+            }
         }
 
         for (int i = 0; i < this.pieces.length; i++) {
