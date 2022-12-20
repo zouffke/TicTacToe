@@ -152,10 +152,10 @@ public class Game {
         if (board.draw()) {
             System.out.println("It's a Draw!\n");
             return true;
-        } else if (board.win(Sort.X, false)) {
+        } else if (board.win(Sort.X)) {
             System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
             return true;
-        } else if (board.win(Sort.O, false)) {
+        } else if (board.win(Sort.O)) {
             System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
             return true;
         }

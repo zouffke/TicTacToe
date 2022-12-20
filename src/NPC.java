@@ -15,7 +15,7 @@ public class NPC extends Player {
         Random random = new Random();
         Sort sort;
 
-        if (count == 1) {
+        if (count == 2) {
             sort = Sort.X;
         } else {
             sort = Sort.O;
@@ -45,10 +45,17 @@ public class NPC extends Player {
     private boolean smartNPC(Board board, Random random, Sort sort) {
         Piece[][] pieces = board.getPieces();
 
-        return corners(pieces, random, board);
+        if (corners(pieces, random, board)) {
+            return true;
+        }
+        if (blocking(pieces, board, sort)) {
+            return true;
+        }
+        // return complete(pieces, board, sort);
+        return false;
     }
 
-    private boolean corners(Piece[][] pieces, Random random, Board board){
+    private boolean corners(Piece[][] pieces, Random random, Board board) {
         int size = Board.getWidth();
         int sizeArray = size - 1;
         String index = "";
@@ -63,7 +70,7 @@ public class NPC extends Player {
                 index = String.format("%d-%d", 2, size - 1);
             } else if (pieces[sizeArray][0] != null && pieces[sizeArray - 1][1] == null) {
                 index = String.format("%d-%d", size - 1, 2);
-            } else if (pieces[sizeArray][sizeArray] != null && pieces[sizeArray - 1][sizeArray - 1] == null){
+            } else if (pieces[sizeArray][sizeArray] != null && pieces[sizeArray - 1][sizeArray - 1] == null) {
                 index = String.format("%d-%d", size - 1, size - 1);
             }
             //No;
@@ -84,4 +91,60 @@ public class NPC extends Player {
         }
         return false;
     }
+
+    private boolean blocking(Piece[][] pieces, Board board, Sort sort) {
+        Sort opponent = Sort.oppositSort(sort);
+        boolean loop = true;
+        int trigger;
+
+        if (Board.getLength() == 3) {
+            trigger = 2;
+        } else {
+            trigger = 3;
+        }
+
+        int counterV;
+        int counterH;
+        int indexLine = 0;
+        int indexNull = 0;
+
+        String playIndex = "";
+
+        for (int i = 0; i < pieces.length && loop; i++) {
+            counterV = 0;
+            counterH = 0;
+            for (int j = 0; j < pieces.length; j++) {
+                if (pieces[i][j] == null) {
+                    indexNull = j + 1;
+                } else if (pieces[i][j].equalsSort(opponent)) {
+                    counterH++;
+                }
+
+                if (pieces[j][i] == null) {
+                    indexNull = j + 1;
+                } else if (pieces[j][i].equalsSort(opponent)) {
+                    counterV++;
+                }
+            }
+            if (counterH == trigger) {
+                playIndex = String.format("%d-%d", i + 1, indexNull);
+                loop = false;
+            }
+            if (counterV == trigger) {
+                playIndex = String.format("%d-%d", indexNull, i + 1);
+                loop = false;
+            }
+        }
+
+        if (playIndex.isEmpty()) {
+            return false;
+        } else {
+            board.place(playIndex, false);
+            return true;
+        }
+    }
+
+    // private boolean complete(Piece[][] pieces, Board board, Sort sort) {
+
+    //}
 }
