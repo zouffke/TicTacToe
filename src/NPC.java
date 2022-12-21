@@ -11,6 +11,8 @@ public class NPC extends Player {
         return super.getNAME();
     }
 
+    //TODO fix weird glitch where the NPC doesn't place a block move or places it off the board
+    //TODO look into the minimax algortihm
     public void playNPC(Board board, int count) {
         Random random = new Random();
         Sort sort;
@@ -45,14 +47,10 @@ public class NPC extends Player {
     private boolean smartNPC(Board board, Random random, Sort sort) {
         Piece[][] pieces = board.getPieces();
 
-        if (corners(pieces, random, board)) {
-            return true;
-        }
         if (blocking(pieces, board, sort)) {
             return true;
         }
-        // return complete(pieces, board, sort);
-        return false;
+        return corners(pieces, random, board);
     }
 
     private boolean corners(Piece[][] pieces, Random random, Board board) {
@@ -94,8 +92,8 @@ public class NPC extends Player {
 
     private boolean blocking(Piece[][] pieces, Board board, Sort sort) {
         Sort opponent = Sort.oppositSort(sort);
-        boolean loop = true;
         int trigger;
+        String index;
 
         if (Board.getLength() == 3) {
             trigger = 2;
@@ -103,10 +101,27 @@ public class NPC extends Player {
             trigger = 3;
         }
 
+        if (!(index = blockingIndex(pieces, opponent, trigger)).isEmpty()) {
+            System.out.printf("%s speelde: %s\n", getNAME(), index);
+            board.place(index, false);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private String blockingIndex(Piece[][] pieces, Sort opponent, int trigger) {
+        boolean loop = true;
+
         int counterV;
         int counterH;
+        int counterDLtoR = 0;
+        int counterDRtoL = 0;
+
         int indexNullH = 0;
         int indexNullV = 0;
+        int indexNullDLtoR = 0;
+        int indexNullDRtoL = 0;
 
         String playIndex = "";
 
@@ -130,6 +145,23 @@ public class NPC extends Player {
                     counterV = 0;
                 }
             }
+
+            if (pieces[i][i] == null) {
+                indexNullDLtoR = i + 1;
+            } else if (pieces[i][i].equalsSort(opponent)) {
+                counterDLtoR++;
+            } else {
+                counterDLtoR = 0;
+            }
+
+            if (pieces[pieces.length - 1 - i][i] == null) {
+                indexNullDRtoL = i + 1;
+            } else if (pieces[pieces.length - i - 1][i].equalsSort(opponent)) {
+                counterDRtoL++;
+            } else {
+                counterDRtoL = 0;
+            }
+
             if (counterH == trigger) {
                 playIndex = String.format("%d-%d", i + 1, indexNullH);
                 loop = false;
@@ -140,15 +172,13 @@ public class NPC extends Player {
             }
         }
 
-        if (playIndex.isEmpty()) {
-            return false;
-        } else {
-            board.place(playIndex, false);
-            return true;
+        if (counterDLtoR == trigger){
+            playIndex = String.format("%d-%d", indexNullDLtoR, indexNullDLtoR);
         }
+        if (counterDRtoL == trigger){
+            playIndex = String.format("%d-%d", indexNullDRtoL, indexNullDRtoL);
+        }
+
+        return playIndex;
     }
-
-    // private boolean complete(Piece[][] pieces, Board board, Sort sort) {
-
-    //}
 }
