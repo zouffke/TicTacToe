@@ -105,33 +105,33 @@ public class NPC extends Player {
 
         int counterV;
         int counterH;
-        int indexLine = 0;
-        int indexNull = 0;
+        int indexNullH = 0;
+        int indexNullV = 0;
 
         String playIndex = "";
 
         for (int i = 0; i < pieces.length && loop; i++) {
             counterV = 0;
             counterH = 0;
-            for (int j = 0; j < pieces.length; j++) {
+            for (int j = 0; j < pieces[i].length; j++) {
                 if (pieces[i][j] == null) {
-                    indexNull = j + 1;
+                    indexNullH = j + 1;
                 } else if (pieces[i][j].equalsSort(opponent)) {
                     counterH++;
                 }
 
                 if (pieces[j][i] == null) {
-                    indexNull = j + 1;
+                    indexNullV = j + 1;
                 } else if (pieces[j][i].equalsSort(opponent)) {
                     counterV++;
                 }
             }
             if (counterH == trigger) {
-                playIndex = String.format("%d-%d", i + 1, indexNull);
+                playIndex = String.format("%d-%d", i + 1, indexNullH);
                 loop = false;
             }
             if (counterV == trigger) {
-                playIndex = String.format("%d-%d", indexNull, i + 1);
+                playIndex = String.format("%d-%d", indexNullV, i + 1);
                 loop = false;
             }
         }
