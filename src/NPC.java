@@ -13,6 +13,7 @@ public class NPC extends Player {
 
     //TODO fix weird glitch where the NPC doesn't place a block move or places it off the board
     //TODO look into the minimax algortihm
+    //TODO plan to make 2 difficulties
     public void playNPC(Board board, int count) {
         Random random = new Random();
         Sort sort;
