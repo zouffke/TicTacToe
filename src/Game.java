@@ -124,5 +124,6 @@ public class Game {
         System.out.println("\nWilt u nog eens spelen? Y/N");
         return keyboard.nextLine().toUpperCase().contains("Y");
     }
+
 }
 
