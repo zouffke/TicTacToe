@@ -38,8 +38,8 @@ public class NPC extends Player {
             stringBuilder.append(random.nextInt(length) + 1).append("-").append(random.nextInt(width) + 1);
 
             validMove = board.place(stringBuilder.toString(), false);
-            System.out.printf("%s speelde: %s\n", getNAME(), stringBuilder);
         } while (!validMove);
+        System.out.printf("%s speelde: %s\n", getNAME(), stringBuilder);
     }
 
     private boolean smartNPC(Board board, Random random, Sort sort) {
@@ -118,12 +118,16 @@ public class NPC extends Player {
                     indexNullH = j + 1;
                 } else if (pieces[i][j].equalsSort(opponent)) {
                     counterH++;
+                } else {
+                    counterH = 0;
                 }
 
                 if (pieces[j][i] == null) {
                     indexNullV = j + 1;
                 } else if (pieces[j][i].equalsSort(opponent)) {
                     counterV++;
+                } else {
+                    counterV = 0;
                 }
             }
             if (counterH == trigger) {
