@@ -62,9 +62,6 @@ public class Game {
         return new Contribution(name1, name2);
     }
 
-    public static Coordinaat splisten() {
-        return null;
-    }
 
     public static void play(Contribution contribution, Board board, Scanner keyboard) {
         int count = 1;
@@ -105,6 +102,11 @@ public class Game {
         } while (!winCheck(board, count, contribution));
     }
 
+    public static Coordinaat splisten(Coordinaat coordinaat) {
+       int n = coordinaat.length;
+        char x = coordinaat.charAt(0);
+        char y = coordinaat.charAt(n-1);
+    }
     public static boolean winCheck(Board board, int count, Contribution contribution) {
 
         if (board.draw()) {

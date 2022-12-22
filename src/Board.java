@@ -1,9 +1,10 @@
-public class Board {
+public class Board{
 
     private static int width = 3;
     private static int length = 3;
     private final Piece[][] pieces;
     private int count = 1;
+
 
     public Board(int width, int length) {
         if (width == length && width == 3 || width == 6 || width == 7 || width == 9) {
