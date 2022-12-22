@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class NPC extends Player {
 
     public NPC() {
@@ -11,175 +9,129 @@ public class NPC extends Player {
         return super.getNAME();
     }
 
-    //TODO fix weird glitch where the NPC doesn't place a block move or places it off the board
-    //TODO look into the minimax algortihm
-    //TODO plan to make 2 difficulties
     public void playNPC(Board board, int count) {
-        Random random = new Random();
-        Sort sort;
-
+        String ownSort;
         if (count == 2) {
-            sort = Sort.X;
+            ownSort = "X";
         } else {
-            sort = Sort.O;
+            ownSort = "O";
         }
 
-        if (!smartNPC(board, random, sort)) {
-            dumbNPC(board, random);
-        }
+        String[][] boardCopy = copyBoard(board.getPieces());
+        String move = bestMove(boardCopy, ownSort);
+        System.out.printf("%s speelde %s\n", getNAME(), move);
+        board.place(move, false);
     }
 
-    private void dumbNPC(Board board, Random random) {
-        boolean validMove;
-        int length = Board.getLength();
-        int width = Board.getWidth();
-        StringBuilder stringBuilder;
+    private String[][] copyBoard(Piece[][] pieces) {
+        int size = pieces.length;
+        String[][] boardCopy = new String[size][size];
 
-        do {
-            stringBuilder = new StringBuilder();
-
-            stringBuilder.append(random.nextInt(length) + 1).append("-").append(random.nextInt(width) + 1);
-
-            validMove = board.place(stringBuilder.toString(), false);
-        } while (!validMove);
-        System.out.printf("%s speelde: %s\n", getNAME(), stringBuilder);
-    }
-
-    private boolean smartNPC(Board board, Random random, Sort sort) {
-        Piece[][] pieces = board.getPieces();
-
-        if (blocking(pieces, board, sort)) {
-            return true;
-        }
-        return corners(pieces, random, board);
-    }
-
-    private boolean corners(Piece[][] pieces, Random random, Board board) {
-        int size = Board.getWidth();
-        int sizeArray = size - 1;
-        String index = "";
-
-        //pieces in the corners?
-        if (pieces[0][0] != null || pieces[0][sizeArray] != null || pieces[sizeArray][0] != null || pieces[sizeArray][sizeArray] != null) {
-            //Yes;
-            //Block the piece in the corner by placing next to it
-            if (pieces[0][0] != null && pieces[1][1] == null) {
-                index = String.format("%d-%d", 2, 2);
-            } else if (pieces[0][sizeArray] != null && pieces[1][sizeArray - 1] == null) {
-                index = String.format("%d-%d", 2, size - 1);
-            } else if (pieces[sizeArray][0] != null && pieces[sizeArray - 1][1] == null) {
-                index = String.format("%d-%d", size - 1, 2);
-            } else if (pieces[sizeArray][sizeArray] != null && pieces[sizeArray - 1][sizeArray - 1] == null) {
-                index = String.format("%d-%d", size - 1, size - 1);
-            }
-            //No;
-        } else {
-            //Pick a random corner to place a piece
-            switch (random.nextInt(4) + 1) {
-                case 1 -> index = "1-1";
-                case 2 -> index = String.format("1-%d", size);
-                case 3 -> index = String.format("%d-1", size);
-                case 4 -> index = String.format("%d-%d", size, size);
-            }
-        }
-
-        if (!index.isEmpty()) {
-            System.out.printf("%s speelde: %s\n", getNAME(), index);
-            board.place(index, false);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean blocking(Piece[][] pieces, Board board, Sort sort) {
-        Sort opponent = Sort.oppositSort(sort);
-        int trigger;
-        String index;
-
-        if (Board.getLength() == 3) {
-            trigger = 2;
-        } else {
-            trigger = 3;
-        }
-
-        if (!(index = blockingIndex(pieces, opponent, trigger)).isEmpty()) {
-            System.out.printf("%s speelde: %s\n", getNAME(), index);
-            board.place(index, false);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private String blockingIndex(Piece[][] pieces, Sort opponent, int trigger) {
-        boolean loop = true;
-
-        int counterV;
-        int counterH;
-        int counterDLtoR = 0;
-        int counterDRtoL = 0;
-
-        int indexNullH = 0;
-        int indexNullV = 0;
-        int indexNullDLtoR = 0;
-        int indexNullDRtoL = 0;
-
-        String playIndex = "";
-
-        for (int i = 0; i < pieces.length && loop; i++) {
-            counterV = 0;
-            counterH = 0;
-            for (int j = 0; j < pieces[i].length; j++) {
+        for (int i = 0; i < boardCopy.length; i++) {
+            for (int j = 0; j < boardCopy[i].length; j++) {
                 if (pieces[i][j] == null) {
-                    indexNullH = j + 1;
-                } else if (pieces[i][j].equalsSort(opponent)) {
-                    counterH++;
+                    boardCopy[i][j] = null;
+                } else if (pieces[i][j].equalsSort(Sort.X)) {
+                    boardCopy[i][j] = "X";
                 } else {
-                    counterH = 0;
-                }
-
-                if (pieces[j][i] == null) {
-                    indexNullV = j + 1;
-                } else if (pieces[j][i].equalsSort(opponent)) {
-                    counterV++;
-                } else {
-                    counterV = 0;
+                    boardCopy[i][j] = "O";
                 }
             }
+        }
+        return boardCopy;
+    }
 
-            if (pieces[i][i] == null) {
-                indexNullDLtoR = i + 1;
-            } else if (pieces[i][i].equalsSort(opponent)) {
-                counterDLtoR++;
-            } else {
-                counterDLtoR = 0;
-            }
-
-            if (pieces[pieces.length - 1 - i][i] == null) {
-                indexNullDRtoL = i + 1;
-            } else if (pieces[pieces.length - i - 1][i].equalsSort(opponent)) {
-                counterDRtoL++;
-            } else {
-                counterDRtoL = 0;
-            }
-
-            if (counterH == trigger) {
-                playIndex = String.format("%d-%d", i + 1, indexNullH);
-                loop = false;
-            }
-            if (counterV == trigger) {
-                playIndex = String.format("%d-%d", indexNullV, i + 1);
-                loop = false;
+    private boolean movesAble(String[][] boardCopy) {
+        for (String[] strings : boardCopy) {
+            for (String string : strings) {
+                if (string == null) {
+                    return false;
+                }
             }
         }
+        return true;
+    }
 
-        if (counterDLtoR == trigger){
-            playIndex = String.format("%d-%d", indexNullDLtoR, indexNullDLtoR);
-        }
-        if (counterDRtoL == trigger){
-            playIndex = String.format("%d-%d", indexNullDRtoL, indexNullDRtoL);
-        }
+    private int evaluation(String ownSort, String[][] boardCopy) {
+return 0;
+    }
 
-        return playIndex;
+    //determine the best value to play
+    private int minimax(String[][] boardCopy, int depth, boolean max, String ownSort) {
+        int score = evaluation(ownSort, boardCopy);
+        String opponent = oppositeSort(ownSort);
+
+        if (score == 10){
+            return score;
+        } else if (score == -10) {
+            return score;
+        }else if (movesAble(boardCopy)){
+            return 0;
+        } else if (max){
+            int best = -1000;
+
+            for (int i = 0; i < boardCopy.length; i++) {
+                for (int j = 0; j < boardCopy[i].length; j++) {
+                    if (boardCopy[i][j] == null){
+                        boardCopy[i][j] = ownSort;
+
+                        best = Math.max(best, minimax(boardCopy, depth + 1, false, ownSort));
+
+                        boardCopy[i][j] = null;
+                    }
+                }
+            }
+            return best;
+        } else{
+            int best = 1000;
+
+            for (int i = 0; i < boardCopy.length; i++) {
+                for (int j = 0; j < boardCopy.length; j++) {
+                    if (boardCopy[i][j] == null){
+                        boardCopy[i][j] = opponent;
+
+                        best = Math.min(best, minimax(boardCopy, depth + 1, true, ownSort));
+
+                        boardCopy[i][j] = null;
+                    }
+                }
+            }
+            return best;
+        }
+    }
+
+    private String bestMove(String[][] boardCopy, String ownSort){
+        boolean max;
+        max = !ownSort.equals("X");
+        int bestVal = -1000;
+        int column = -1;
+        int row = -1;
+
+        for (int i = 0; i < boardCopy.length; i++) {
+            for (int j = 0; j < boardCopy[i].length; j++) {
+                if (boardCopy[i][j] == null){
+                    boardCopy[i][j] = ownSort;
+
+                    int moveVal = minimax(boardCopy, 0, max, ownSort);
+
+                    boardCopy[i][j] = null;
+
+                    if (moveVal > bestVal){
+                        row = i + 1;
+                        column = j + 1;
+                        bestVal = moveVal;
+                    }
+                }
+            }
+        }
+        return String.format("%d-%d", row, column);
+    }
+
+    private String oppositeSort(String sort){
+        if (sort.equals("X")){
+            return "O";
+        } else{
+            return "X";
+        }
     }
 }
