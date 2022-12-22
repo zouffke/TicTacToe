@@ -62,6 +62,10 @@ public class Game {
         return new Contribution(name1, name2);
     }
 
+    public static Coordinaat splisten() {
+        return null;
+    }
+
     public static void play(Contribution contribution, Board board, Scanner keyboard) {
         int count = 1;
         boolean validMove;
