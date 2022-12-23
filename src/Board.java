@@ -23,14 +23,18 @@ public class Board{
         int y = index.getY();
 
         if (x < 1 || x > getWidth() || y < 1 || y > getLength()) {
-            System.out.println("Dit veld bestaat niet");
+            if (human) {
+                System.out.println("Dit veld bestaat niet");
+            }
             return false;
         } else {
             x--;
             y--;
         }
         if (this.pieces[x][y] != null) {
-            System.out.println("Dit vak is al bezet");
+            if (human) {
+                System.out.println("Dit vak is al bezet");
+            }
             return false;
         } else {
             if (this.count % 2 != 0) {
@@ -51,9 +55,9 @@ public class Board{
         int countDRtoL = 0;
         int winCount;
 
-        if (getLength() == 3){
+        if (getLength() == 3) {
             winCount = 3;
-        }else {
+        } else {
             winCount = 4;
         }
 
@@ -125,6 +129,10 @@ public class Board{
 
     public static int getLength() {
         return Board.length;
+    }
+
+    public Piece[][] getPieces() {
+        return this.pieces;
     }
 
     public void drawBoard() {

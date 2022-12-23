@@ -8,7 +8,7 @@ public enum Sort {
         return Sort.values()[random.nextInt(2)];
     }
 
-    public static Sort randomSort(Sort sort){
+    public static Sort oppositSort(Sort sort){
         if (sort.equals(Sort.O)){
             return Sort.X;
         } else{
