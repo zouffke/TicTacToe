@@ -97,6 +97,7 @@ public class Game {
         int count = 1;
         boolean validMove;
         Player currentPlayer;
+        Sort currentSort;
 
         contribution.setSorts();
 
@@ -108,9 +109,11 @@ public class Game {
         do {
             if (count++ == 1) {
                 currentPlayer = contribution.getSort(1).equals("X") ? contribution.getPlayer(1) : contribution.getPlayer(2);
+                currentSort = Sort.X;
                 System.out.printf("\n%s's beurt;\n", currentPlayer.getNAME());
             } else {
                 currentPlayer = contribution.getSort(1).equals("O") ? contribution.getPlayer(1) : contribution.getPlayer(2);
+                currentSort = Sort.O;
                 System.out.printf("\n%s's beurt;\n", currentPlayer.getNAME());
                 count = 1;
             }
@@ -135,7 +138,7 @@ public class Game {
 
 
             }
-        } while (!winCheck(board, currentPlayer, contribution));
+        } while (!winCheck(board, currentPlayer, currentSort));
     }
 
     public static Coordinaat splisten(Scanner keyboard) {
@@ -157,19 +160,15 @@ public class Game {
         return new Coordinaat(x, y);
     }
 
-    public static boolean winCheck(Board board, Player currentPlayer, Contribution contribution) {
+    public static boolean winCheck(Board board, Player currentPlayer, Sort currentSort) {
 
         if (board.draw()) {
             System.out.println("It's a Draw!\n");
             return true;
-        } else if (board.win(Sort.X)) {
-            System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
-            return true;
-        } else if (board.win(Sort.O)) {
+        } else if (board.win(currentSort)) {
             System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
             return true;
         }
-
         return false;
     }
 

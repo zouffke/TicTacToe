@@ -61,7 +61,6 @@ public class Board {
             for (int x = 0; x < this.pieces[y].length; x++) {
                 try {
                     if (this.pieces[y][x].equalsSort(sort)) {
-
                         for (int yy = y - 1; yy <= y + 1; yy++) {
                             for (int xx = x - 1; xx <= x + 1; xx++) {
                                 //out of bounds check
@@ -75,7 +74,7 @@ public class Board {
                             }
                         }
                     }
-                } catch (NullPointerException ignored){
+                } catch (NullPointerException ignored) {
 
                 }
             }
@@ -84,16 +83,18 @@ public class Board {
     }
 
     //TODO find out why the array goes out of bounds
-    private boolean repeat(Sort sort, int y, int x, int yy, int xx, int trigger, int index){
-        if (trigger - 1 == index){
+    private boolean repeat(Sort sort, int y, int x, int yy, int xx, int trigger, int index) {
+        if (trigger - 1 <= index) {
             return true;
+        } else {
+
+            int counter = index;
+
+            if (this.pieces[y + yy + counter][x + xx + counter].equalsSort(sort)) {
+                repeat(sort, y, x, yy, xx, trigger, ++counter);
+            }
+            return false;
         }
-        int counter = index;
-        if (this.pieces[y + yy + counter][x + xx + counter].equalsSort(sort)){
-            counter++;
-            repeat(sort, y, x, yy, xx, trigger, counter);
-        }
-        return false;
     }
 
     public boolean draw() {
