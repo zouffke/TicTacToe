@@ -20,7 +20,8 @@ public class NPC extends Player {
         String[][] boardCopy = copyBoard(board.getPieces());
         String move = bestMove(boardCopy, ownSort);
         System.out.printf("%s speelde %s\n", getNAME(), move);
-        board.place(move, false);
+        //TODO change the moves in the NPC with cords instead of a String
+       // board.place(move, false);
     }
 
     private String[][] copyBoard(Piece[][] pieces) {

@@ -93,11 +93,9 @@ public class Game {
     }
 
 
-
     public static void play(Contribution contribution, Board board, Scanner keyboard) {
         int count = 1;
         boolean validMove;
-        String input;
         Player currentPlayer;
 
         contribution.setSorts();
@@ -121,41 +119,44 @@ public class Game {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                     npc.playNPC(board, count);
-                } catch (InterruptedException ex){
+                } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
             } else {
                 do {
-                    validMove = board.place(splisten(keyboard));
+                    validMove = board.place(splisten(keyboard), true);
 
-                }while(!validMove);
+                } while (!validMove);
 
 
                 board.drawBoard();
 
-            board.drawBoard();
+                board.drawBoard();
 
-        } while (!winCheck(board, count, contribution));
+            }
+        } while (!winCheck(board, currentPlayer, contribution));
     }
-        public static Coordinaat splisten(Scanner keyboard) {
-            boolean validMove;
-            String input;
-            do {
-                validMove = false;
-                System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
-                input = keyboard.nextLine();
-                if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")) {
-                    validMove = true;
-                } else {
-                    System.out.println("Verkeerde notatie");
-                }
 
-            } while (!validMove);
-            int x = Integer.parseInt(input.substring(0, 1));
-            int y = Integer.parseInt(input.substring(2, 3));
-            return new Coordinaat(x, y);
+    public static Coordinaat splisten(Scanner keyboard) {
+        boolean validMove;
+        String input;
+        do {
+            validMove = false;
+            System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
+            input = keyboard.nextLine();
+            if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")) {
+                validMove = true;
+            } else {
+                System.out.println("Verkeerde notatie");
+            }
 
-    public static boolean winCheck(Board board, int count, Contribution contribution) {
+        } while (!validMove);
+        int x = Integer.parseInt(input.substring(0, 1));
+        int y = Integer.parseInt(input.substring(2, 3));
+        return new Coordinaat(x, y);
+    }
+
+    public static boolean winCheck(Board board, Player currentPlayer, Contribution contribution) {
 
         if (board.draw()) {
             System.out.println("It's a Draw!\n");
@@ -177,4 +178,5 @@ public class Game {
     }
 
 }
+
 

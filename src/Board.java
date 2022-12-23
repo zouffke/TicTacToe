@@ -18,7 +18,7 @@ public class Board{
         this.pieces = new Piece[Board.width][Board.length];
     }
 
-    public boolean place(Coordinaat index) {
+    public boolean place(Coordinaat index, boolean human) {
         int x = index.getX();
         int y = index.getY();
 
