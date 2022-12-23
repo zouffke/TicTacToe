@@ -118,10 +118,12 @@ public class Game {
             if (currentPlayer instanceof NPC npc) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
-                    npc.playNPC(board, count);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
+                } finally {
+                    npc.playNPC(board, count);
                 }
+
             } else {
                 do {
                     validMove = board.place(splisten(keyboard), true);
@@ -131,7 +133,6 @@ public class Game {
 
                 board.drawBoard();
 
-                board.drawBoard();
 
             }
         } while (!winCheck(board, currentPlayer, contribution));

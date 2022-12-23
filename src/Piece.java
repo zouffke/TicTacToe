@@ -6,13 +6,11 @@ public class Piece {
     private final int X;
     private final int Y;
     private static int id = 0;
-    private final int ID;
 
     public Piece(Sort sort, int x, int y) {
         this.X = x;
         this.Y = y;
         this.SORT = sort;
-        this.ID = id++;
     }
 
     public Sort getSORT() {
@@ -32,20 +30,24 @@ public class Piece {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Piece piece = (Piece) o;
-        return X == piece.X && Y == piece.Y && ID == piece.ID && SORT == piece.SORT;
+        return X == piece.X && Y == piece.Y && SORT == piece.SORT;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(SORT, X, Y, ID);
+        return Objects.hash(SORT, X, Y);
     }
 
-    public boolean equalsSort(Sort sort){
-        return this.getSORT().equals(sort);
+    public boolean equalsSort(Sort sort) {
+        try {
+            return this.getSORT().equals(sort);
+        } catch (NullPointerException e){
+            return false;
+        }
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%s", this.getSORT());
     }
 }

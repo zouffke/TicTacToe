@@ -57,33 +57,39 @@ public class Board {
             trigger = 4;
         }
 
-        for (int y = 0; y < pieces.length; y++) {
-            for (int x = 0; x < pieces[y].length; x++) {
-                if (pieces[y][x].equalsSort(sort)) {
-                    for (int yy = y - 1; yy <= y + 1; yy++) {
-                        for (int xx = x - 1; xx <= x + 1; xx++) {
-                            //out of bounds check
-                            if (yy < 0 || xx < 0 || yy >= pieces.length || xx >= pieces.length || (xx == x && yy == y)) {
-                                break;
-                            } else {
-                                if (repeat(sort, y, x, yy, xx, trigger, 1)){
-                                    return true;
+        for (int y = 0; y < this.pieces.length; y++) {
+            for (int x = 0; x < this.pieces[y].length; x++) {
+                try {
+                    if (this.pieces[y][x].equalsSort(sort)) {
+
+                        for (int yy = y - 1; yy <= y + 1; yy++) {
+                            for (int xx = x - 1; xx <= x + 1; xx++) {
+                                //out of bounds check
+                                if (yy < 0 || xx < 0 || yy >= this.pieces.length || xx >= this.pieces.length || (xx == x && yy == y)) {
+                                    break;
+                                } else {
+                                    if (repeat(sort, y, x, yy, xx, trigger, 0)) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
                     }
+                } catch (NullPointerException ignored){
+
                 }
             }
         }
         return false;
     }
 
+    //TODO find out why the array goes out of bounds
     private boolean repeat(Sort sort, int y, int x, int yy, int xx, int trigger, int index){
-        if (trigger == index){
+        if (trigger - 1 == index){
             return true;
         }
         int counter = index;
-        if (pieces[y + yy + counter][x + xx + counter].equalsSort(sort)){
+        if (this.pieces[y + yy + counter][x + xx + counter].equalsSort(sort)){
             counter++;
             repeat(sort, y, x, yy, xx, trigger, counter);
         }
