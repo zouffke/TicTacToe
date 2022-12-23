@@ -1,4 +1,4 @@
-public class Board{
+public class Board {
 
     private static int width = 3;
     private static int length = 3;
@@ -49,78 +49,56 @@ public class Board{
     }
 
     public boolean win(Sort sort) {
-        int countH;
-        int countV;
-        int countDLtoR = 0;
-        int countDRtoL = 0;
-        int winCount;
-
-        if (getLength() == 3) {
-            winCount = 3;
+        //define the trigger
+        int trigger;
+        if (getWidth() == 3) {
+            trigger = 3;
         } else {
-            winCount = 4;
+            trigger = 4;
         }
 
-        for (int i = 0; i < this.pieces.length; i++) {
-
-            countH = 0;
-            countV = 0;
-
-            for (int j = 0; j < this.pieces.length; j++) {
-                //horizontal
-                if (countH == winCount) {
-                    return true;
-                } else if (this.pieces[i][j] == null) {
-                    countH = 0;
-                } else if (this.pieces[i][j].equalsSort(sort)) {
-                    countH++;
-                } else {
-                    countH = 0;
+        for (int y = 0; y < pieces.length; y++) {
+            for (int x = 0; x < pieces[y].length; x++) {
+                if (pieces[y][x].equalsSort(sort)) {
+                    for (int yy = y - 1; yy <= y + 1; yy++) {
+                        for (int xx = x - 1; xx <= x + 1; xx++) {
+                            //out of bounds check
+                            if (yy < 0 || xx < 0 || yy >= pieces.length || xx >= pieces.length || (xx == x && yy == y)) {
+                                break;
+                            } else {
+                                if (repeat(sort, y, x, yy, xx, trigger, 1)){
+                                    return true;
+                                }
+                            }
+                        }
+                    }
                 }
-
-                //vertical
-                if (countV == winCount) {
-                    return true;
-                } else if (this.pieces[j][i] == null) {
-                    countV = 0;
-                } else if (this.pieces[j][i].equalsSort(sort)) {
-                    countV++;
-                } else {
-                    countV = 0;
-                }
-            }
-
-            if (countH >= winCount || countV >= winCount) {
-                return true;
-            }
-
-            //diagonal left to right
-            if (countDLtoR == winCount) {
-                return true;
-            } else if (this.pieces[i][i] == null) {
-                countDLtoR = 0;
-            } else if (this.pieces[i][i].equalsSort(sort)) {
-                countDLtoR++;
-            } else {
-                countDLtoR = 0;
-            }
-
-            //diagonal right to left
-            if (countDRtoL == winCount) {
-                return true;
-            } else if (this.pieces[this.pieces.length - 1 - i][i] == null) {
-                countDRtoL = 0;
-            } else if (this.pieces[this.pieces.length - 1 - i][i].equalsSort(sort)) {
-                countDRtoL++;
-            } else {
-                countDRtoL = 0;
             }
         }
-        return countDLtoR >= winCount || countDRtoL >= winCount;
+        return false;
+    }
+
+    private boolean repeat(Sort sort, int y, int x, int yy, int xx, int trigger, int index){
+        if (trigger == index){
+            return true;
+        }
+        int counter = index;
+        if (pieces[y + yy + counter][x + xx + counter].equalsSort(sort)){
+            counter++;
+            repeat(sort, y, x, yy, xx, trigger, counter);
+        }
+        return false;
     }
 
     public boolean draw() {
-        return Piece.getId() == Board.getLength() * Board.getWidth();
+        for (Piece[] piece : pieces) {
+            for (Piece value : piece) {
+                if (value == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static int getWidth() {
