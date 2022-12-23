@@ -80,32 +80,34 @@ public class Game {
                 System.out.printf("\n%s's beurt;\n", contribution.getSort(1).equals("O") ? contribution.getName(1) : contribution.getName(2));
                 count = 1;
             }
-
             do {
-                validMove = false;
-                System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
-                input = keyboard.nextLine();
-                if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")) {
-                    validMove = true;
-                }
+            validMove = board.place(splisten(keyboard));
 
-                if (validMove) {
-                    validMove = board.place(input);
-                } else {
-                    System.out.println("Verkeerde notatie");
-                }
+            }while(!validMove);
 
-            } while (!validMove);
 
             board.drawBoard();
 
         } while (!winCheck(board, count, contribution));
     }
 
-    public static Coordinaat splisten(Coordinaat coordinaat) {
-       int n = coordinaat.length;
-        char x = coordinaat.charAt(0);
-        char y = coordinaat.charAt(n-1);
+    public static Coordinaat splisten(Scanner keyboard) {
+        boolean validMove;
+        String input;
+        do {
+            validMove = false;
+            System.out.print("Waar wilt u een stuk plaatsen?\nLocatie: ");
+            input = keyboard.nextLine();
+            if (!input.isEmpty() && input.matches("[0-9]" + "-" + "[0-9]")) {
+                validMove = true;
+            } else {
+                System.out.println("Verkeerde notatie");
+            }
+
+        } while (!validMove);
+        int x = Integer.parseInt(input.substring(0, 1));
+        int y = Integer.parseInt(input.substring(2, 3));
+        return new Coordinaat(x, y);
     }
     public static boolean winCheck(Board board, int count, Contribution contribution) {
 
