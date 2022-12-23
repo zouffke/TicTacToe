@@ -1,9 +1,10 @@
-public class Board {
+public class Board{
 
     private static int width = 3;
     private static int length = 3;
     private final Piece[][] pieces;
     private int count = 1;
+
 
     public Board(int width, int length) {
         if (width == length && width == 3 || width == 6 || width == 7 || width == 9) {
@@ -17,9 +18,9 @@ public class Board {
         this.pieces = new Piece[Board.width][Board.length];
     }
 
-    public boolean place(String index) {
-        int x = Integer.parseInt(index.substring(0, 1));
-        int y = Integer.parseInt(index.substring(2, 3));
+    public boolean place(Coordinaat index) {
+        int x = index.getX();
+        int y = index.getY();
 
         if (x < 1 || x > getWidth() || y < 1 || y > getLength()) {
             System.out.println("Dit veld bestaat niet");
