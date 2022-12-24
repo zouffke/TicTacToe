@@ -64,11 +64,15 @@ public class Board {
                         for (int yy = y - 1; yy <= y + 1; yy++) {
                             for (int xx = x - 1; xx <= x + 1; xx++) {
                                 //out of bounds check
-                                if (yy < 0 || xx < 0 || yy >= this.pieces.length || xx >= this.pieces.length || (xx == x && yy == y)) {
-                                    break;
-                                } else {
-                                    if (repeat(sort, y, x, yy, xx, trigger, 0)) {
-                                        return true;
+                                if (!(yy < 0 || xx < 0 || yy >= this.pieces.length || xx >= this.pieces.length || (xx == x && yy == y))) {
+                                    try {
+                                        if (pieces[yy][xx].equalsSort(sort)) {
+                                            if (repeat(sort, y, x, yy, xx, trigger, 2)) {
+                                                return true;
+                                            }
+                                        }
+                                    } catch (NullPointerException ignored) {
+
                                     }
                                 }
                             }
@@ -84,16 +88,28 @@ public class Board {
 
     //TODO find out why the array goes out of bounds
     private boolean repeat(Sort sort, int y, int x, int yy, int xx, int trigger, int index) {
-        if (trigger - 1 <= index) {
+        if (trigger <= index) {
             return true;
         } else {
-
-            int counter = index;
-
-            if (this.pieces[y + yy + counter][x + xx + counter].equalsSort(sort)) {
-                repeat(sort, y, x, yy, xx, trigger, ++counter);
+            int counterY = 0;
+            int counterX = 0;
+            if (yy != 0) {
+                counterY = index;
+                yy = 1;
             }
-            return false;
+            if (xx != 0) {
+                counterX = index;
+                xx = 1;
+            }
+
+            try {
+                if (this.pieces[y + yy + counterY][x + xx + counterX].equalsSort(sort)) {
+                    repeat(sort, y, x, yy, xx, trigger, ++index);
+                }
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException ignored) {
+
+            }
+            return trigger - 1 <= index;
         }
     }
 
