@@ -61,56 +61,62 @@ public class Board {
             for (int x = 0; x < this.pieces[y].length; x++) {
                 try {
                     if (this.pieces[y][x].equalsSort(sort)) {
-                        for (int yy = y - 1; yy <= y + 1; yy++) {
-                            for (int xx = x - 1; xx <= x + 1; xx++) {
+                        for (int yy = -1; yy <= 1; yy++) {
+                            for (int xx = -1; xx <= 1; xx++) {
                                 //out of bounds check
-                                if (!(yy < 0 || xx < 0 || yy >= this.pieces.length || xx >= this.pieces.length || (xx == x && yy == y))) {
-                                    try {
-                                        if (pieces[yy][xx].equalsSort(sort)) {
-                                            if (repeat(sort, y, x, yy, xx, trigger, 2)) {
-                                                return true;
-                                            }
-                                        }
-                                    } catch (NullPointerException ignored) {
-
+                                if (!(yy + y < 0 || xx + x < 0 || yy + y >= this.pieces.length || xx + x >= this.pieces.length || (xx == 0 && yy == 0))) {
+                                    if (repeat(sort, y, x, yy, xx, trigger, 0)) {
+                                        return true;
                                     }
                                 }
                             }
                         }
                     }
                 } catch (NullPointerException ignored) {
-
                 }
             }
         }
         return false;
     }
 
-    //TODO find out why the array goes out of bounds
     private boolean repeat(Sort sort, int y, int x, int yy, int xx, int trigger, int index) {
-        if (trigger <= index) {
+        if (index == trigger - 1) {
             return true;
         } else {
             int counterY = 0;
             int counterX = 0;
             if (yy != 0) {
-                counterY = index;
-                yy = 1;
+                if (yy > 0) {
+                    counterY = index;
+                } else {
+                    counterY = Math.negateExact(index);
+                }
             }
             if (xx != 0) {
-                counterX = index;
-                xx = 1;
-            }
-
-            try {
-                if (this.pieces[y + yy + counterY][x + xx + counterX].equalsSort(sort)) {
-                    repeat(sort, y, x, yy, xx, trigger, ++index);
+                if (xx > 0) {
+                    counterX = index;
+                } else {
+                    counterX = Math.negateExact(index);
                 }
-            } catch (ArrayIndexOutOfBoundsException | NullPointerException ignored) {
-
             }
-            return trigger - 1 <= index;
+            if (outOfBounds(y + yy + counterY, x + xx + counterX)) {
+                return false;
+            } else {
+                try {
+                    if (pieces[y + yy + counterY][x + xx + counterX].equalsSort(sort)) {
+                        return repeat(sort, y, x, yy, xx, trigger, ++index);
+                    } else {
+                        return false;
+                    }
+                } catch (NullPointerException e) {
+                    return false;
+                }
+            }
         }
+    }
+
+    private boolean outOfBounds(int y, int x) {
+        return pieces.length <= y || pieces.length <= x || y < 0 || x < 0;
     }
 
     public boolean draw() {
