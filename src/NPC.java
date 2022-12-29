@@ -1,4 +1,6 @@
 public class NPC extends Player {
+    private static final int MIN = -1000;
+    private static final int MAX = 1000;
 
     public NPC() {
         super("Bot");
@@ -9,91 +11,92 @@ public class NPC extends Player {
         return super.getNAME();
     }
 
-    public void playNPC(Board board, int count) {
-        String ownSort;
-        if (count == 2) {
-            ownSort = "X";
+    public void playNPC(Board board, Sort currentSort) {
+
+        Coordinaat move = bestMove(board, currentSort);
+        System.out.printf("%s speelde %s-%s\n", getNAME(), move.getY(), move.getX());
+        board.place(move, currentSort, false);
+        board.drawBoard();
+    }
+
+    private boolean movesAble(Board board) {
+        return board.draw();
+    }
+
+    private int evaluation(Sort ownSort, Board board) {
+        if (board.win(ownSort)) {
+            return 10;
+        } else if (board.win(Sort.oppositSort(ownSort))) {
+            return -10;
         } else {
-            ownSort = "O";
+            return 0;
         }
-
-        String[][] boardCopy = copyBoard(board.getPieces());
-        String move = bestMove(boardCopy, ownSort);
-        System.out.printf("%s speelde %s\n", getNAME(), move);
-        //TODO change the moves in the NPC with cords instead of a String
-       // board.place(move, false);
-    }
-
-    private String[][] copyBoard(Piece[][] pieces) {
-        int size = pieces.length;
-        String[][] boardCopy = new String[size][size];
-
-        for (int i = 0; i < boardCopy.length; i++) {
-            for (int j = 0; j < boardCopy[i].length; j++) {
-                if (pieces[i][j] == null) {
-                    boardCopy[i][j] = null;
-                } else if (pieces[i][j].equalsSort(Sort.X)) {
-                    boardCopy[i][j] = "X";
-                } else {
-                    boardCopy[i][j] = "O";
-                }
-            }
-        }
-        return boardCopy;
-    }
-
-    private boolean movesAble(String[][] boardCopy) {
-        for (String[] strings : boardCopy) {
-            for (String string : strings) {
-                if (string == null) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private int evaluation(String ownSort, String[][] boardCopy) {
-return 0;
     }
 
     //determine the best value to play
-    private int minimax(String[][] boardCopy, int depth, boolean max, String ownSort) {
-        int score = evaluation(ownSort, boardCopy);
-        String opponent = oppositeSort(ownSort);
+    private int minimax(Board board, int depth, boolean max, Sort ownSort, int alpha, int beta) {
+        Piece[][] pieces = board.getPieces();
+        //get the score of the current board
+        int score = evaluation(ownSort, board);
 
-        if (score == 10){
-            return score;
+        Sort opponent = Sort.oppositSort(ownSort);
+
+
+        if (score == 10) {
+            return score - depth;
         } else if (score == -10) {
-            return score;
-        }else if (movesAble(boardCopy)){
+            return score + depth;
+        } else if (movesAble(board)) {
             return 0;
-        } else if (max){
-            int best = -1000;
+            //if the NPC is the maximizer
+        } else if (max) {
+            int best = MIN;
 
-            for (int i = 0; i < boardCopy.length; i++) {
-                for (int j = 0; j < boardCopy[i].length; j++) {
-                    if (boardCopy[i][j] == null){
-                        boardCopy[i][j] = ownSort;
+            for (int y = 0; y < pieces.length; y++) {
+                for (int x = 0; x < pieces[y].length; x++) {
+                    if (pieces[y][x] == null) {
+                        //place a temporary piece on the copy board
+                        board.setPiece(y, x, ownSort);
 
-                        best = Math.max(best, minimax(boardCopy, depth + 1, false, ownSort));
+                            //calculate the value of this move
+                            int value = minimax(board, depth + 1, false, ownSort, alpha, beta);
 
-                        boardCopy[i][j] = null;
+                            //determine the best move
+                            best = Math.max(best, value);
+                            alpha = Math.max(alpha, best);
+
+                            //set the piece on the board back to null
+                            board.setPieceNull(y, x);
+
+                            if (beta <= alpha) {
+                                break;
+                            }
                     }
                 }
             }
             return best;
-        } else{
-            int best = 1000;
+            //if the NPC is the minimizer
+        } else {
+            int best = MAX;
 
-            for (int i = 0; i < boardCopy.length; i++) {
-                for (int j = 0; j < boardCopy.length; j++) {
-                    if (boardCopy[i][j] == null){
-                        boardCopy[i][j] = opponent;
+            for (int y = 0; y < pieces.length; y++) {
+                for (int x = 0; x < pieces[y].length; x++) {
+                    if (pieces[y][x] == null) {
+                        //place a temporary piece on the copy board
+                        board.setPiece(y, x, opponent);
 
-                        best = Math.min(best, minimax(boardCopy, depth + 1, true, ownSort));
+                            //calculate the value of this move
+                            int value = minimax(board, depth + 1, true, ownSort, alpha, beta);
 
-                        boardCopy[i][j] = null;
+                            best = Math.min(best, value);
+                            beta = Math.min(beta, best);
+
+                            //set the piece on the board back to null
+                            board.setPieceNull(y, x);
+
+                            if (beta <= alpha) {
+                                break;
+                            }
                     }
                 }
             }
@@ -101,38 +104,40 @@ return 0;
         }
     }
 
-    private String bestMove(String[][] boardCopy, String ownSort){
+    private Coordinaat bestMove(Board board, Sort ownSort) {
+        Piece[][] pieces = board.getPieces();
+
         boolean max;
-        max = !ownSort.equals("X");
-        int bestVal = -1000;
+        //is the NPC the maximizer?
+        max = ownSort.equals(Sort.X);
+
+        int bestVal = MIN;
         int column = -1;
         int row = -1;
+        System.out.println("Thinking...");
+        for (int y = 0; y < pieces.length; y++) {
+            for (int x = 0; x < pieces[y].length; x++) {
+                if (pieces[y][x] == null) {
 
-        for (int i = 0; i < boardCopy.length; i++) {
-            for (int j = 0; j < boardCopy[i].length; j++) {
-                if (boardCopy[i][j] == null){
-                    boardCopy[i][j] = ownSort;
+                    board.setPiece(y, x, ownSort);
 
-                    int moveVal = minimax(boardCopy, 0, max, ownSort);
+                    int moveVal = minimax(board, 0, max, ownSort, MIN, MAX);
 
-                    boardCopy[i][j] = null;
+                    board.setPieceNull(y, x);
 
-                    if (moveVal > bestVal){
-                        row = i + 1;
-                        column = j + 1;
+                    if (moveVal > bestVal) {
+                        row = x + 1;
+                        column = y + 1;
                         bestVal = moveVal;
                     }
                 }
             }
         }
-        return String.format("%d-%d", row, column);
+        System.out.println("\nBest move is " + bestVal);
+        return cords(column, row);
     }
 
-    private String oppositeSort(String sort){
-        if (sort.equals("X")){
-            return "O";
-        } else{
-            return "X";
-        }
+    private Coordinaat cords(int y, int x) {
+        return new Coordinaat(y, x);
     }
 }

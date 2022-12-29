@@ -69,7 +69,7 @@ public class Game {
     public static Board setBoard(Scanner keyboard) {
         String choice;
 
-        System.out.print("\nKies het soort bord dat u wilt gebruiken:\n1: 3x3\n2: 6x6\n3: 7x7\n4: 9x9\n\tKeuze: ");
+        System.out.print("\nKies het soort bord dat u wilt gebruiken:\n1: 3x3\n2: 5x5\n3: 7x7\n4: 9x9\n\tKeuze: ");
         choice = keyboard.nextLine();
 
         switch (choice) {
@@ -77,7 +77,7 @@ public class Game {
                 return new Board(3, 3);
             }
             case "2" -> {
-                return new Board(6, 6);
+                return new Board(5, 5);
             }
             case "3" -> {
                 return new Board(7, 7);
@@ -97,6 +97,7 @@ public class Game {
         int count = 1;
         boolean validMove;
         Player currentPlayer;
+        Sort currentSort;
 
         contribution.setSorts();
 
@@ -108,9 +109,11 @@ public class Game {
         do {
             if (count++ == 1) {
                 currentPlayer = contribution.getSort(1).equals("X") ? contribution.getPlayer(1) : contribution.getPlayer(2);
+                currentSort = Sort.X;
                 System.out.printf("\n%s's beurt;\n", currentPlayer.getNAME());
             } else {
                 currentPlayer = contribution.getSort(1).equals("O") ? contribution.getPlayer(1) : contribution.getPlayer(2);
+                currentSort = Sort.O;
                 System.out.printf("\n%s's beurt;\n", currentPlayer.getNAME());
                 count = 1;
             }
@@ -118,23 +121,24 @@ public class Game {
             if (currentPlayer instanceof NPC npc) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
-                    npc.playNPC(board, count);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
+                } finally {
+                    npc.playNPC(board, currentSort);
                 }
+
             } else {
                 do {
-                    validMove = board.place(splisten(keyboard), true);
+                    validMove = board.place(splisten(keyboard), currentSort,  true);
 
                 } while (!validMove);
 
 
                 board.drawBoard();
 
-                board.drawBoard();
 
             }
-        } while (!winCheck(board, currentPlayer, contribution));
+        } while (!winCheck(board, currentPlayer, currentSort));
     }
 
     public static Coordinaat splisten(Scanner keyboard) {
@@ -151,24 +155,20 @@ public class Game {
             }
 
         } while (!validMove);
-        int x = Integer.parseInt(input.substring(0, 1));
-        int y = Integer.parseInt(input.substring(2, 3));
-        return new Coordinaat(x, y);
+        int y = Integer.parseInt(input.substring(0, 1));
+        int x = Integer.parseInt(input.substring(2, 3));
+        return new Coordinaat(y, x);
     }
 
-    public static boolean winCheck(Board board, Player currentPlayer, Contribution contribution) {
+    public static boolean winCheck(Board board, Player currentPlayer, Sort currentSort) {
 
         if (board.draw()) {
             System.out.println("It's a Draw!\n");
             return true;
-        } else if (board.win(Sort.X)) {
-            System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
-            return true;
-        } else if (board.win(Sort.O)) {
+        } else if (board.win(currentSort)) {
             System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
             return true;
         }
-
         return false;
     }
 
