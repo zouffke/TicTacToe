@@ -6,7 +6,7 @@ public class Board {
 
 
     public Board(int width, int length) {
-        if (width == length && width == 3 || width == 6 || width == 7 || width == 9) {
+        if (width == length && width == 3 || width == 5 || width == 7 || width == 9) {
             Board.width = width;
             Board.length = length;
         } else {
@@ -143,8 +143,8 @@ public class Board {
         StringBuilder stringBuilder = new StringBuilder();
         if (getLength() == 3) {
             stringBuilder.append("_".repeat(15)).append("\n").append("|").append(" ".repeat(13)).append("|\n");
-        } else if (getLength() == 6) {
-            stringBuilder.append("_".repeat(27)).append("\n").append("|").append(" ".repeat(25)).append("|\n");
+        } else if (getLength() == 5) {
+            stringBuilder.append("_".repeat(23)).append("\n").append("|").append(" ".repeat(21)).append("|\n");
         } else if (getLength() == 7) {
             stringBuilder.append("_".repeat(31)).append("\n").append("|").append(" ".repeat(29)).append("|\n");
         } else {
@@ -179,8 +179,8 @@ public class Board {
             if (y == getLength() - 1) {
                 if (getLength() == 3) {
                     stringBuilder.append("|").append("_".repeat(13)).append("|\n");
-                } else if (getLength() == 6) {
-                    stringBuilder.append("|").append("_".repeat(25)).append("|\n");
+                } else if (getLength() == 5) {
+                    stringBuilder.append("|").append("_".repeat(21)).append("|\n");
                 } else if (getLength() == 7) {
                     stringBuilder.append("|").append("_".repeat(29)).append("|\n");
                 } else {
@@ -189,8 +189,8 @@ public class Board {
             } else {
                 if (getLength() == 3) {
                     stringBuilder.append("| ").append("~".repeat(11)).append(" |\n");
-                } else if (getLength() == 6) {
-                    stringBuilder.append("| ").append("~".repeat(23)).append(" |\n");
+                } else if (getLength() == 5) {
+                    stringBuilder.append("| ").append("~".repeat(19)).append(" |\n");
                 } else if (getLength() == 7) {
                     stringBuilder.append("| ").append("~".repeat(27)).append(" |\n");
                 } else {
