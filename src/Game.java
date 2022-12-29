@@ -124,12 +124,12 @@ public class Game {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 } finally {
-                    npc.playNPC(board, count);
+                    npc.playNPC(board, currentSort);
                 }
 
             } else {
                 do {
-                    validMove = board.place(splisten(keyboard), true);
+                    validMove = board.place(splisten(keyboard), currentSort,  true);
 
                 } while (!validMove);
 
@@ -155,9 +155,9 @@ public class Game {
             }
 
         } while (!validMove);
-        int x = Integer.parseInt(input.substring(0, 1));
-        int y = Integer.parseInt(input.substring(2, 3));
-        return new Coordinaat(x, y);
+        int y = Integer.parseInt(input.substring(0, 1));
+        int x = Integer.parseInt(input.substring(2, 3));
+        return new Coordinaat(y, x);
     }
 
     public static boolean winCheck(Board board, Player currentPlayer, Sort currentSort) {

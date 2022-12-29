@@ -3,7 +3,6 @@ public class Board {
     private static int width = 3;
     private static int length = 3;
     private final Piece[][] pieces;
-    private int count = 1;
 
 
     public Board(int width, int length) {
@@ -14,14 +13,15 @@ public class Board {
             Board.width = 3;
             Board.length = 3;
         }
-        Piece.setId(0);
         this.pieces = new Piece[Board.width][Board.length];
     }
 
-    public boolean place(Coordinaat index, boolean human) {
-        int x = index.getX();
-        int y = index.getY();
+    //TODO change the place function to use exeptions
+    public boolean place(Coordinaat cords, Sort currentSort, boolean human) {
+        int x = cords.getX();
+        int y = cords.getY();
 
+        //out of bounds check
         if (x < 1 || x > getWidth() || y < 1 || y > getLength()) {
             if (human) {
                 System.out.println("Dit veld bestaat niet");
@@ -31,21 +31,17 @@ public class Board {
             x--;
             y--;
         }
-        if (this.pieces[x][y] != null) {
+
+        //occupation check
+        if (this.pieces[y][x] != null) {
             if (human) {
                 System.out.println("Dit vak is al bezet");
             }
             return false;
-        } else {
-            if (this.count % 2 != 0) {
-                this.pieces[x][y] = new Piece(Sort.X, x, y);
-                this.count++;
-            } else {
-                this.pieces[x][y] = new Piece(Sort.O, x, y);
-                this.count = 1;
-            }
-            return true;
         }
+        // if the chosen field is empty
+        this.pieces[y][x] = new Piece(currentSort, y, x);
+        return true;
     }
 
     public boolean win(Sort sort) {
@@ -154,33 +150,33 @@ public class Board {
         } else {
             stringBuilder.append("_".repeat(39)).append("\n").append("|").append(" ".repeat(37)).append("|\n");
         }
-        for (int i = 0; i < this.pieces.length; i++) {
-            if (this.pieces[i][count++] == null) {
+        for (int y = 0; y < this.pieces.length; y++) {
+            if (this.pieces[y][count++] == null) {
                 stringBuilder.append("| ");
             } else {
                 stringBuilder.append("| ");
             }
-            for (int j = 0; j < this.pieces.length; j++) {
-                if (this.pieces[i][j] == null) {
-                    stringBuilder.append(i + 1).append("-").append(j + 1);
+            for (int x = 0; x < this.pieces.length; x++) {
+                if (this.pieces[y][x] == null) {
+                    stringBuilder.append(y + 1).append("-").append(x + 1);
                 } else {
-                    stringBuilder.append(" ").append(this.pieces[i][j]);
+                    stringBuilder.append(" ").append(this.pieces[y][x]);
                 }
-                if (j == getWidth() - 1) {
-                    if (pieces[i][j] == null) {
+                if (x == getWidth() - 1) {
+                    if (pieces[y][x] == null) {
                         stringBuilder.append(" |\n");
                     } else {
                         stringBuilder.append("  |\n");
                     }
                 } else {
-                    if (pieces[i][j] == null) {
+                    if (pieces[y][x] == null) {
                         stringBuilder.append("|");
                     } else {
                         stringBuilder.append(" |");
                     }
                 }
             }
-            if (i == getLength() - 1) {
+            if (y == getLength() - 1) {
                 if (getLength() == 3) {
                     stringBuilder.append("|").append("_".repeat(13)).append("|\n");
                 } else if (getLength() == 6) {
@@ -203,5 +199,12 @@ public class Board {
             }
         }
         System.out.print(stringBuilder);
+    }
+
+    public void setPiece(int y, int x, Sort sort) {
+        this.pieces[y][x] = new Piece(sort, y, x);
+    }
+    public void setPieceNull(int y, int x){
+        this.pieces[y][x] = null;
     }
 }

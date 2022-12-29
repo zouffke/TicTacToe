@@ -5,9 +5,8 @@ public class Piece {
     private final Sort SORT;
     private final int X;
     private final int Y;
-    private static int id = 0;
 
-    public Piece(Sort sort, int x, int y) {
+    public Piece(Sort sort, int y, int x) {
         this.X = x;
         this.Y = y;
         this.SORT = sort;
@@ -15,14 +14,6 @@ public class Piece {
 
     public Sort getSORT() {
         return SORT;
-    }
-
-    public static int getId() {
-        return id;
-    }
-
-    public static void setId(int id) {
-        Piece.id = id;
     }
 
     @Override

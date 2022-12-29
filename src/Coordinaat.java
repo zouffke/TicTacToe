@@ -1,8 +1,8 @@
 public class Coordinaat {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
-    public Coordinaat(int x, int y) {
+    public Coordinaat(int y, int x) {
         this.x = x;
         this.y = y;
     }
@@ -16,6 +16,6 @@ public class Coordinaat {
 
     @Override
     public String toString() {
-        return String.format("%d-%d", x, y) ;
+        return String.format("%d-%d", y, x) ;
     }
 }
