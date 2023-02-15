@@ -30,10 +30,10 @@ public class Piece {
     }
 
     public boolean equalsSort(Sort sort) {
-        try {
-            return this.getSORT().equals(sort);
-        } catch (NullPointerException e){
+        if (sort == null){
             return false;
+        } else {
+            return this.getSORT().equals(sort);
         }
     }
 

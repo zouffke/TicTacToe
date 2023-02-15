@@ -6,7 +6,7 @@ public class Board {
 
 
     public Board(int width, int length) {
-        if (width == length && width == 3 || width == 5 || width == 7 || width == 9) {
+        if (width == length && width == 3 || width == 5 || width == 7) {
             Board.width = width;
             Board.length = length;
         } else {
@@ -16,7 +16,6 @@ public class Board {
         this.pieces = new Piece[Board.width][Board.length];
     }
 
-    //TODO change the place function to use exeptions
     public boolean place(Coordinaat cords, Sort currentSort, boolean human) {
         int x = cords.getX();
         int y = cords.getY();
@@ -55,20 +54,17 @@ public class Board {
 
         for (int y = 0; y < this.pieces.length; y++) {
             for (int x = 0; x < this.pieces[y].length; x++) {
-                try {
-                    if (this.pieces[y][x].equalsSort(sort)) {
-                        for (int yy = -1; yy <= 1; yy++) {
-                            for (int xx = -1; xx <= 1; xx++) {
-                                //out of bounds check
-                                if (!(yy + y < 0 || xx + x < 0 || yy + y >= this.pieces.length || xx + x >= this.pieces.length || (xx == 0 && yy == 0))) {
-                                    if (repeat(sort, y, x, yy, xx, trigger, 0)) {
-                                        return true;
-                                    }
+                if (this.pieces[y][x] != null && this.pieces[y][x].equalsSort(sort)) {
+                    for (int yy = -1; yy <= 1; yy++) {
+                        for (int xx = -1; xx <= 1; xx++) {
+                            //out of bounds check
+                            if (!(yy + y < 0 || xx + x < 0 || yy + y >= this.pieces.length || xx + x >= this.pieces.length || (xx == 0 && yy == 0))) {
+                                if (repeat(sort, y, x, yy, xx, trigger, 0)) {
+                                    return true;
                                 }
                             }
                         }
                     }
-                } catch (NullPointerException ignored) {
                 }
             }
         }
@@ -145,10 +141,8 @@ public class Board {
             stringBuilder.append("_".repeat(15)).append("\n").append("|").append(" ".repeat(13)).append("|\n");
         } else if (getLength() == 5) {
             stringBuilder.append("_".repeat(23)).append("\n").append("|").append(" ".repeat(21)).append("|\n");
-        } else if (getLength() == 7) {
-            stringBuilder.append("_".repeat(31)).append("\n").append("|").append(" ".repeat(29)).append("|\n");
         } else {
-            stringBuilder.append("_".repeat(39)).append("\n").append("|").append(" ".repeat(37)).append("|\n");
+            stringBuilder.append("_".repeat(31)).append("\n").append("|").append(" ".repeat(29)).append("|\n");
         }
         for (int y = 0; y < this.pieces.length; y++) {
             if (this.pieces[y][count++] == null) {
@@ -181,20 +175,16 @@ public class Board {
                     stringBuilder.append("|").append("_".repeat(13)).append("|\n");
                 } else if (getLength() == 5) {
                     stringBuilder.append("|").append("_".repeat(21)).append("|\n");
-                } else if (getLength() == 7) {
-                    stringBuilder.append("|").append("_".repeat(29)).append("|\n");
                 } else {
-                    stringBuilder.append("|").append("_".repeat(37)).append("|\n");
+                    stringBuilder.append("|").append("_".repeat(29)).append("|\n");
                 }
             } else {
                 if (getLength() == 3) {
                     stringBuilder.append("| ").append("~".repeat(11)).append(" |\n");
                 } else if (getLength() == 5) {
                     stringBuilder.append("| ").append("~".repeat(19)).append(" |\n");
-                } else if (getLength() == 7) {
-                    stringBuilder.append("| ").append("~".repeat(27)).append(" |\n");
                 } else {
-                    stringBuilder.append("| ").append("~".repeat(35)).append(" |\n");
+                    stringBuilder.append("| ").append("~".repeat(27)).append(" |\n");
                 }
             }
         }
@@ -204,7 +194,8 @@ public class Board {
     public void setPiece(int y, int x, Sort sort) {
         this.pieces[y][x] = new Piece(sort, y, x);
     }
-    public void setPieceNull(int y, int x){
+
+    public void setPieceNull(int y, int x) {
         this.pieces[y][x] = null;
     }
 }

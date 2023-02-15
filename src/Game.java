@@ -129,8 +129,7 @@ public class Game {
 
             } else {
                 do {
-                    validMove = board.place(splisten(keyboard), currentSort,  true);
-
+                    validMove = board.place(splisten(keyboard), currentSort, true);
                 } while (!validMove);
 
 
@@ -162,11 +161,11 @@ public class Game {
 
     public static boolean winCheck(Board board, Player currentPlayer, Sort currentSort) {
 
-        if (board.draw()) {
-            System.out.println("It's a Draw!\n");
-            return true;
-        } else if (board.win(currentSort)) {
+        if (board.win(currentSort)) {
             System.out.printf("%s heeft gewonnen\n", currentPlayer.getNAME());
+            return true;
+        } else if (board.draw()) {
+            System.out.println("It's a Draw!\n");
             return true;
         }
         return false;
